@@ -58,7 +58,7 @@
     <div class="login-container">
       <h2>Welcome Back!</h5>
       <h5>Log in</h2>
-      <form>
+      <form id="login-form">
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" id="username" placeholder="Enter username" required>
@@ -70,5 +70,45 @@
         <button type="submit">Submit</button>
       </form>
     </div>
+
+    <script>
+      // Initialize first user to storage started
+      var accountsInfoLst = JSON.parse(localStorage.getItem("accountsInfo"));
+      if (accountsInfoLst == null) {
+        accountsInfoLst = []
+        accountsInfoLst.push({username: 'ADMIN', password: 'groupX'});
+        localStorage.setItem("accountsInfo", JSON.stringify(accountsInfoLst));
+        console.log("NULL");
+      }
+
+      const loginForm = document.getElementById("login-form");
+
+      loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        var accountsInfoLst = JSON.parse(localStorage.getItem("accountsInfo"));
+        const currUsername = document.getElementById("username");
+        const currPwd = document.getElementById("password");
+
+        console.log(accountsInfoLst);
+        var findUser = false;
+        for (let i = 0; i < accountsInfoLst.length; i++) {
+          if (accountsInfoLst[i].username == currUsername.value && accountsInfoLst[i].password == currPwd.value) {
+            findUser = true;
+          }
+          console.log(i);
+        }
+
+        // TODO: If valid user found -> redirect to home page with user name at top
+        // If not, then empty fields, let user know it's incorrect, and to try again.
+        if (findUser) {
+          alert("VALID");
+        } else {
+          alert("Invalid username or password. Try again.");
+          loginForm.reset();
+        }
+      });
+
+    </script>
   </body>
 </html>
