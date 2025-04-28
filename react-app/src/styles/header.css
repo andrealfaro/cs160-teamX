@@ -1,0 +1,58 @@
+.header { 
+    display: flex; 
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+
+a { 
+    text-decoration-line: none;
+    color: black;
+}
+
+.logo-container { 
+    display: flex; 
+    flex-direction: row;
+    /* align-items: center; */
+}
+
+.logo { 
+    height: 50px;
+    margin-right: 5px;
+    margin-top: 6.5px;
+}
+
+.nav-links { 
+    display: flex; 
+    align-items: center;
+    justify-content: space-between;
+    padding: 0; 
+    margin: 0;
+    font-size: 0.5rem;
+}
+   
+
+.nav-links li { 
+    list-style-type: none;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.signlog-container { 
+    display: flex; 
+    align-items: center;
+}
+
+button { 
+    height: 40px;
+    border-radius: 50px;
+}
+
+button:hover { 
+    cursor: pointer;
+}
+
+
+.login-button { 
+    margin-left: 25px;
+}
