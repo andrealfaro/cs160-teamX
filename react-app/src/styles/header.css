@@ -16,13 +16,12 @@ a {
 .logo-container { 
     display: flex; 
     flex-direction: row;
-    /* align-items: center; */
+    align-items: center;
 }
 
 .logo { 
     height: 50px;
     margin-right: 5px;
-    margin-top: 6.5px;
 }
 
 .nav-links { 
