@@ -25,6 +25,9 @@ function Footer() {
                     <li>
                         <Link to='/community'><p className='link'>Community</p></Link>
                     </li>
+                    <li>
+                        <Link to='/about'><p className='link'>About</p></Link>
+                    </li>
                 </ul>
             </div>
             <p className='copy'>© 2025 FireAid</p>
