@@ -5,6 +5,7 @@ import ResourcePage from '../pages/ResourcePage';
 import LiveUpdatesPage from '../pages/LiveUpdatesPage';
 import LegalPage from '../pages/LegalPage';
 import CommunityPage from '../pages/CommunityPage';
+import AboutPage from '../pages/AboutPage';
 
 // page linking
 function AppRoutes() { 
@@ -17,6 +18,7 @@ function AppRoutes() {
                 <Route path='/updates' element= {<LiveUpdatesPage/>}/>
                 <Route path='/legal' element= {<LegalPage/>}/>
                 <Route path='/community' element= {<CommunityPage/>}/>
+                <Route path='/about' element= {<AboutPage/>}/>
             </Routes>
         </Router> 
     );

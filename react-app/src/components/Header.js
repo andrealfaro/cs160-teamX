@@ -1,6 +1,6 @@
 import React from 'react'; 
 import { Link } from 'react-router-dom';
-import logo from '../assets/fire-logo.jpg'
+import logo from '../assets/fire-logo.png'
 import '../styles/header.css';
 
 function Header() { 
@@ -12,19 +12,22 @@ function Header() {
             </div>
             <ul className='nav-links'>
                 <li>
-                    <Link to='/home'><h1 className='home-link'>Home</h1></Link>
+                    <Link to='/home'><h1 className='link'>Home</h1></Link>
                 </li>
                 <li>
-                    <Link to='/resource'><h1 className='resource-link'>Resources</h1></Link>
+                    <Link to='/resource'><h1 className='link'>Resources</h1></Link>
                 </li>
                 <li>
-                    <Link to='/updates'><h1 className='updates-link'>Live Updates</h1></Link>
+                    <Link to='/updates'><h1 className='link'>Live Updates</h1></Link>
                 </li>
                 <li>
-                    <Link to='/legal'><h1 className='legal-link'>Legal</h1></Link>
+                    <Link to='/legal'><h1 className='link'>Legal</h1></Link>
                 </li>
                 <li>
-                    <Link to='/community'><h1 className='community-link'>Community</h1></Link>
+                    <Link to='/community'><h1 className='link'>Community</h1></Link>
+                </li>
+                <li>
+                    <Link to='/about'><h1 className='link'>About</h1></Link>
                 </li>
             </ul>
             {/* <div className='language-container'>
@@ -34,8 +37,8 @@ function Header() {
                 </select>
             </div> */}
             <div className='signlog-container'>
-                <button className='signup-button'>Sign Up</button>
-                <button className='login-button'>Log In</button>
+                <button className='signup btn'>SIGNUP</button>
+                <button className='login btn'>LOGIN</button>
             </div>
         </div>
     )

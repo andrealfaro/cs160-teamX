@@ -3,11 +3,14 @@
     flex-direction: row;
     width: 100%;
     justify-content: space-around;
+    background-color: black;
+    /* #fa4c00 */
+    padding: 10px;
 }
 
 a { 
     text-decoration-line: none;
-    color: black;
+    color: white;
 }
 
 .logo-container { 
@@ -43,16 +46,25 @@ a {
     align-items: center;
 }
 
-button { 
-    height: 40px;
-    border-radius: 50px;
-}
-
 button:hover { 
     cursor: pointer;
 }
 
+.btn { 
+    height: 40px;
+    border-radius: 20px;
+    width: 90px;
+    border: none;
+    background-color: white;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
 
-.login-button { 
-    margin-left: 25px;
+.login { 
+    margin-left: 20px;
+}
+
+.signup { 
+    background-color: #fa4c00;
+    color: white;
 }
