@@ -14,16 +14,16 @@ function Footer() {
                         <Link to='/home'><p className='link'>Home</p></Link>
                     </li>
                     <li>                            
-                        <Link to='/resource'><p className='link'>Resources</p></Link>
+                        <Link to='/resources'><p className='link'>Resources</p></Link>
                     </li>
                     <li>
-                        <Link to='/updates'><p className='link'>Live Updates</p></Link>
+                        <Link to='/live-updates'><p className='link'>Live Updates</p></Link>
                     </li>
                     <li>
-                        <Link to='/legal'><p className='link'>Legal</p></Link>
+                        <Link to='/legal-rights'><p className='link'>Legal</p></Link>
                     </li>
                     <li>
-                        <Link to='/community'><p className='link'>Community</p></Link>
+                        <Link to='/community-contacts'><p className='link'>Community</p></Link>
                     </li>
                     <li>
                         <Link to='/about'><p className='link'>About</p></Link>

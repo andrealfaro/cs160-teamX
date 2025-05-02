@@ -15,16 +15,16 @@ function Header() {
                     <Link to='/home'><h1 className='link'>Home</h1></Link>
                 </li>
                 <li>
-                    <Link to='/resource'><h1 className='link'>Resources</h1></Link>
+                    <Link to='/resources'><h1 className='link'>Resources</h1></Link>
                 </li>
                 <li>
-                    <Link to='/updates'><h1 className='link'>Live Updates</h1></Link>
+                    <Link to='/live-updates'><h1 className='link'>Live Updates</h1></Link>
                 </li>
                 <li>
-                    <Link to='/legal'><h1 className='link'>Legal</h1></Link>
+                    <Link to='/legal-rights'><h1 className='link'>Legal</h1></Link>
                 </li>
                 <li>
-                    <Link to='/community'><h1 className='link'>Community</h1></Link>
+                    <Link to='/community-contacts'><h1 className='link'>Community</h1></Link>
                 </li>
                 <li>
                     <Link to='/about'><h1 className='link'>About</h1></Link>
@@ -37,11 +37,13 @@ function Header() {
                 </select>
             </div> */}
             <div className='signlog-container'>
-                <button className='signup btn'>SIGNUP</button>
+                {/* <button className='signup btn'>SIGNUP</button> */}
                 <button className='login btn'>LOGIN</button>
             </div>
         </div>
     )
 }; 
+
+// maybe implement a hamburger method for the nav bar when the screen is small
 
 export default Header;
