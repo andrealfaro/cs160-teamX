@@ -1,10 +1,40 @@
-import React from 'react'; 
+import React, { useEffect, useState } from 'react'; 
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/home.css';
 
 function HomePage() { 
+    const [airState, airFunc] = useState(null);
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((currPos) => {
+                const lat = currPos.coords.latitude;
+                const lon = currPos.coords.longitude;
+                const apiKey = "a05610bc6dd9531e9c80d075e39ca6fc";
+                const url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+
+                fetch (url)
+                    .then((data) => {
+                    return data.json(); 
+                })
+                .then((json) => {
+                    const currAQI = json.list[0].main.aqi;
+                    const aqiDesc = ["Good", "Fair", "Moderate", "Poor", "Very Poor"];
+                    const advice = ["No precautions.", "No precautions.", "Limit outdoor activity and close windows.", 
+                        "Wear N95 masks, do not go outdoors, and close windows.", "Wear N95 masks, do not go outdoors, and close windows."];
+                    airFunc({
+                        val: currAQI,
+                        desc: aqiDesc[currAQI - 1],
+                        updated: new Date().toLocaleTimeString(),
+                        advice: advice[currAQI - 1]
+                    });
+                });
+                // here
+            })
+        }
+    }, []);
+
     return (
         <div className='main-container'>
             <Header />
@@ -17,9 +47,9 @@ function HomePage() {
                                 <span className="status-indicator status-poor"></span>
                                 Air Quality
                             </h3>
-                            <p className='status'><strong>Status:</strong> Poor (AQI 187)</p>
-                            <p className='advice'><strong>Health Advice:</strong> Wear N95 masks outdoors. Keep windows closed.</p>
-                            <p className='updated'><small>Updated: Today, 08:45 AM</small></p>
+                            <p className='status'><strong>Status:</strong> {airState ? airState.desc: 'Loading...'} </p>
+                            <p className='advice'><strong>Health Advice:</strong> {airState ? airState.advice: 'Loading...'} </p>
+                            <p className='updated'><small>Updated: Today, {airState ? airState.updated: 'Loading...'} </small></p>
                         </div>
                         <div className='condition-card' id='water'>
                             <h3>
