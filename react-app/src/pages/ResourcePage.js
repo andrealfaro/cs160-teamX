@@ -5,13 +5,55 @@ import '../styles/resource.css';
 
 function ResourcePage() { 
     const [showForm, setShowForm] = useState(false); 
-    const toggleForm = () => setShowForm(!showForm); 
+    const [filters, setFilters] = useState({
+        'resource-type': 'All',
+        location: 'All Areas',
+        status: 'All'
+    });
+    const toggleForm = () => setShowForm(!showForm);
+
+    const allResources = [{
+        title: "Water Distribution at City Hall",
+        postedBy: "John Doe",
+        description: "Clean bottled water available for all affected residents. Bring containers for additional water. Each household can receive up to 5 gallons. ID not required.",
+        address: "2375 Ridge Road, North County",
+        location: "North County",
+        hours: "8:00 AM - 8:00 PM daily through April 30",
+        contact: "555-234-5678",
+        type: "Water",
+        status: "Official",
+        timePosted: "1 hour ago"
+    },
+    {
+        title: "Food Distribution at Regional Food Bank",
+        postedBy: "Aaron Donald",
+        description: "Bottled water and meal for everyone. ID required.",
+        address: "1734 East 41st Street, Los Angeles, CA 90058",
+        location: "East Side",
+        hours: "8:00 AM - 12:00 PM daily through May 5",
+        contact: "323-234-3030",
+        type: "Food",
+        status: "Official",
+        timePosted: "15 mins ago"
+    }];
 
     const handleFilterClick = (e, group) => {
-        const siblings = document.querySelectorAll(`.${group} .filter-tag`);
+        /*const siblings = document.querySelectorAll(`.${group} .filter-tag`);
         siblings.forEach(sib => sib.classList.remove('active'));
-        e.target.classList.add('active');
+        e.target.classList.add('active');*/
+        const currSelected = e.target.textContent;
+        setFilters(temp => ({
+            ...temp,
+            [group]: currSelected
+        }));
       };
+
+    const filteredResources = allResources.filter(currR => {
+        const sameType = filters['resource-type'] == 'All' || filters['resource-type'] == currR.type;
+        const sameLoc = filters.location == 'All Areas' || filters.location == currR.location;
+        const sameStatus = filters.status == 'All' || filters.status == currR.status;
+        return sameType && sameLoc && sameStatus;
+    });
 
     return (
         <div className='main-container'>
@@ -85,7 +127,7 @@ function ResourcePage() {
                             <h4>{title}</h4>
                             <div className="filter-options">
                             {options.map((opt, i) => (
-                                <span key={i} className={`filter-tag ${i === 0 ? 'active' : ''}`} onClick={(e) => handleFilterClick(e, group)}>{opt}</span>
+                                <span key={i} className={`filter-tag ${filters[group] == opt ? 'active' : ''}`} onClick={(e) => handleFilterClick(e, group)}>{opt}</span>
                             ))}
                             </div>
                         </div>
@@ -99,119 +141,35 @@ function ResourcePage() {
                 </div>
 
                 <div className='rsrc-posts'>
-                    {/* basic template for the resource card */}
-                    <div className='rsrc-card'>
-                        <div className='rsrc-header'>
-                            <h3>Water Distribution at City Hall</h3>
-                        </div>
-                        <div className='rsrc-meta'>
-                            <span id='post-by'>Posted by: John Doe</span>
-                            <span id='post-time'>1 Hour ago</span>
-                        </div>
-                        <p>Clean bottled water available for all affected residents. Bring containers for additional water. Each household can receive up to 5 gallons. ID not required.</p>
-                        <p><strong>Location:</strong> 2375 Ridge Road, North County</p>
-                        <p><strong>Hours:</strong> 8:00 AM - 8:00 PM daily through April 30</p>
-                        <p><strong>Contact:</strong> 555-234-5678</p>
-                        <div className="tag-list">
-                            <span className="tag">Official</span>
-                            <span className="tag">Water</span>
-                            <span className="tag">North County</span>
-                        </div>
-                        <div className="resource-actions">
-                            <div className="action-btns">
-                                <div className='helpful-share'>
-                                    <button className="action-btn">👍 Helpful (45)</button>
-                                    <button className="action-btn">💬 Share (12)</button>
-                                </div>
-                                <button className="action-btn">📌 Save</button>
+                    {filteredResources.map((r, i) => (
+                        <div key={i} className='rsrc-card'>
+                            <div className='rsrc-header'>
+                                <h3>{r.title}</h3>
                             </div>
-                        </div>
-                    </div>
-
-                    <div className='rsrc-card'>
-                        <div className='rsrc-header'>
-                            <h3>Water Distribution at City Hall</h3>
-                        </div>
-                        <div className='rsrc-meta'>
-                            <span id='post-by'>Posted by: John Doe</span>
-                            <span id='post-time'>1 Hour ago</span>
-                        </div>
-                        <p>Clean bottled water available for all affected residents. Bring containers for additional water. Each household can receive up to 5 gallons. ID not required.</p>
-                        <p><strong>Location:</strong> 2375 Ridge Road, North County</p>
-                        <p><strong>Hours:</strong> 8:00 AM - 8:00 PM daily through April 30</p>
-                        <p><strong>Contact:</strong> 555-234-5678</p>
-                        <div className="tag-list">
-                            <span className="tag">Official</span>
-                            <span className="tag">Water</span>
-                            <span className="tag">North County</span>
-                        </div>
-                        <div className="resource-actions">
-                            <div className="action-btns">
-                                <div className='helpful-share'>
-                                    <button className="action-btn">👍 Helpful (45)</button>
-                                    <button className="action-btn">💬 Share (12)</button>
-                                </div>
-                                <button className="action-btn">📌 Save</button>
+                            <div className='rsrc-meta'>
+                                <span id='post-by'>Posted by: {r.postedBy}</span>
+                                <span id='post-time'>{r.timePosted}</span>
                             </div>
-                        </div>   
-                    </div>
-
-                    <div className='rsrc-card'>
-                        <div className='rsrc-header'>
-                            <h3>Water Distribution at City Hall</h3>
-                        </div>
-                        <div className='rsrc-meta'>
-                            <span id='post-by'>Posted by: John Doe</span>
-                            <span id='post-time'>1 Hour ago</span>
-                        </div>
-                        <p>Clean bottled water available for all affected residents. Bring containers for additional water. Each household can receive up to 5 gallons. ID not required.</p>
-                        <p><strong>Location:</strong> 2375 Ridge Road, North County</p>
-                        <p><strong>Hours:</strong> 8:00 AM - 8:00 PM daily through April 30</p>
-                        <p><strong>Contact:</strong> 555-234-5678</p>
-                        <div className="tag-list">
-                            <span className="tag">Official</span>
-                            <span className="tag">Water</span>
-                            <span className="tag">North County</span>
-                        </div>
-                        <div className="resource-actions">
-                            <div className="action-btns">
-                                <div className='helpful-share'>
-                                    <button className="action-btn">👍 Helpful (45)</button>
-                                    <button className="action-btn">💬 Share (12)</button>
-                                </div>
-                                <button className="action-btn">📌 Save</button>
+                            <p>{r.description}</p>
+                            <p><strong> Location: </strong> {r.address} </p>
+                            <p><strong> Hours: </strong> {r.hours} </p>
+                            <p><strong> Contact: </strong> {r.contact} </p>
+                            <div className="tag-list">
+                                <span className="tag">{r.status}</span>
+                                <span className="tag">{r.type}</span>
+                                <span className="tag">{r.location}</span>
                             </div>
-                        </div>   
-                    </div>
-
-                    <div className='rsrc-card'>
-                        <div className='rsrc-header'>
-                            <h3>Water Distribution at City Hall</h3>
-                        </div>
-                        <div className='rsrc-meta'>
-                            <span id='post-by'>Posted by: John Doe</span>
-                            <span id='post-time'>1 Hour ago</span>
-                        </div>
-                        <p>Clean bottled water available for all affected residents. Bring containers for additional water. Each household can receive up to 5 gallons. ID not required.</p>
-                        <p><strong>Location:</strong> 2375 Ridge Road, North County</p>
-                        <p><strong>Hours:</strong> 8:00 AM - 8:00 PM daily through April 30</p>
-                        <p><strong>Contact:</strong> 555-234-5678</p>
-                        <div className="tag-list">
-                            <span className="tag">Official</span>
-                            <span className="tag">Water</span>
-                            <span className="tag">North County</span>
-                        </div>
-                        <div className="resource-actions">
-                            <div className="action-btns">
-                                <div className='helpful-share'>
-                                    <button className="action-btn">👍 Helpful (45)</button>
-                                    <button className="action-btn">💬 Share (12)</button>
+                            <div className="resource-actions">
+                                <div className="action-btns">
+                                    <div className='helpful-share'>
+                                        <button className="action-btn">👍 Helpful (45)</button>
+                                        <button className="action-btn">💬 Share (12)</button>
+                                    </div>
+                                    <button className="action-btn">📌 Save</button>
                                 </div>
-                                <button className="action-btn">📌 Save</button>
                             </div>
-                        </div>   
-                    </div>
-
+                        </div> 
+                    ))}
                 </div>
             </div>
             <Footer />
