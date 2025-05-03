@@ -30,7 +30,6 @@ function HomePage() {
                         advice: advice[currAQI - 1]
                     });
                 });
-                // here
             })
         }
     }, []);
