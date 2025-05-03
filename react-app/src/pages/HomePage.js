@@ -58,27 +58,27 @@ function HomePage() {
                             <div className="resource-icon">📋</div>
                             <h3>Resource Directory</h3>
                             <p>Find emergency shelters, food distribution centers, clean water sources, and medical aid stations.</p>
-                            <Link to='/resource'><p className='resource-btn'>Resources</p></Link>
+                            <Link to='/resources'><p className='resource-btn'>Resources</p></Link>
                         </div>
                         <div className="resource-card">
                             <div className="resource-icon">⚖️</div>
                             <h3>Legal Rights & Assistance</h3>
                             <p>Learn about your rights, insurance claims, FEMA assistance, and connect with pro bono legal help.</p>
-                            <Link to='/legal'><p className='resource-btn'>Legal</p></Link>
+                            <Link to='/legal-rights'><p className='resource-btn'>Legal</p></Link>
                         </div>
                         
                         <div className="resource-card">
                             <div className="resource-icon">🔔</div>
                             <h3>Live Updates</h3>
                             <p>Stay informed with real-time updates about evacuation zones, fire progression, and emergency services.</p>
-                            <Link to='/updates'><p className='resource-btn'>Live Updates</p></Link>
+                            <Link to='/live-updates'><p className='resource-btn'>Live Updates</p></Link>
                         </div>
                         
                         <div className="resource-card">
                             <div className="resource-icon">🏠</div>
                             <h3>Community Contacts</h3>
                             <p>Connect with local organizations offering support, services, and resources.</p>
-                            <Link to='/community'><p className='resource-btn'>Contacts</p></Link>
+                            <Link to='/community-contacts'><p className='resource-btn'>Contacts</p></Link>
                         </div>
                     </div>
                 </div>

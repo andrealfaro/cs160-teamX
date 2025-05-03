@@ -18,12 +18,12 @@ function AppRoutes() {
             <Routes> 
                 <Route path='/' element= {<HomePage/>}/> 
                 <Route path='/home' element= {<HomePage/>}/> 
-                <Route path='/resource' element= {<ResourcePage/>}/> 
-                <Route path='/updates' element= {<LiveUpdatesPage/>}/>
-                <Route path='/legal' element= {<LegalPage/>}/>
-                <Route path='/community' element= {<CommunityPage/>}/>
+                <Route path='/resources' element= {<ResourcePage/>}/> 
+                <Route path='/live-updates' element= {<LiveUpdatesPage/>}/>
+                <Route path='/legal-rights' element= {<LegalPage/>}/>
+                <Route path='/community-contacts' element= {<CommunityPage/>}/>
                 <Route path='/about' element= {<AboutPage/>}/>
-                <Route path='/profile' element= {<UserProfilePage/>}/>
+                <Route path='/user-profile' element= {<UserProfilePage/>}/>
                 <Route path='/login' element= {<LoginPage/>}/>
                 <Route path='/signup' element= {<SignupPage/>}/>
             </Routes>
