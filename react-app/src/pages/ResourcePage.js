@@ -12,7 +12,8 @@ function ResourcePage() {
     });
     const toggleForm = () => setShowForm(!showForm);
 
-    const allResources = [{
+    const [allResources, setAllResources] = useState([
+    {
         title: "Water Distribution at City Hall",
         postedBy: "John Doe",
         description: "Clean bottled water available for all affected residents. Bring containers for additional water. Each household can receive up to 5 gallons. ID not required.",
@@ -24,7 +25,7 @@ function ResourcePage() {
         status: "Official",
         timePosted: "1 hour ago"
     },
-    {
+    /*{
         title: "Food Distribution at Regional Food Bank",
         postedBy: "Aaron Donald",
         description: "Bottled water and meal for everyone. ID required.",
@@ -34,8 +35,51 @@ function ResourcePage() {
         contact: "323-234-3030",
         type: "Food",
         status: "Official",
-        timePosted: "15 mins ago"
-    }];
+        timePosted: "15 mins ago"*/
+    ]);
+
+    const [formInput, setFormInput] = useState({
+        title: '',
+        postedBy: '',
+        description: '',
+        address: '',
+        location: '',
+        hours: '',
+        contact: '',
+        type: 'Water',
+        status: '',
+        timePosted: ''
+    });
+
+    const doPostFormUpdate = (e) => {
+        e.preventDefault();
+        
+        const rToAdd = {
+            title: formInput.title,
+            postedBy: formInput.postedBy,
+            description: formInput.description,
+            address: formInput.address,
+            location: formInput.location,
+            hours: formInput.hours,
+            contact: formInput.contact,
+            type: formInput.type,
+            status: formInput.status,
+            timePosted: formInput.timePosted
+        };
+
+        setAllResources(prev => [rToAdd, ...prev]);
+        setFormInput({ title: '',
+            postedBy: '',
+            description: '',
+            address: '',
+            location: '',
+            hours: '',
+            contact: '',
+            type: 'Water',
+            status: '',
+            timePosted: ''});
+        setShowForm(false);
+    }
 
     const handleFilterClick = (e, group) => {
         /*const siblings = document.querySelectorAll(`.${group} .filter-tag`);
@@ -69,24 +113,24 @@ function ResourcePage() {
                 {/* new resource post */}
                 {showForm && (
                     <div className='post-container'>
-                        <form className='post-form'>
+                        <form className='post-form' onSubmit={doPostFormUpdate}>
                             <h3>Share a Resource</h3>
                             <div className='form-group'>
                                 <label for='rsrc-title'>Resource Title*</label>
-                                <input type='text' id='rsrc-title' placeholder='e.g., Food Drive at Community Center' required></input>
+                                <input type='text' id='rsrc-title' placeholder='e.g., Food Drive at Community Center' required value={formInput.title} onChange={(e) => setFormInput({...formInput, title: e.target.value})}></input>
                             </div>
                             <div className='form-group'>
                                 <label for='rsrc-description'>Description*</label>
-                                <textarea id='resrc-description' placeholder='Provide details about the resource, availability, requirements, etc.' required></textarea>
+                                <textarea id='resrc-description' placeholder='Provide details about the resource, availability, requirements, etc.' required value={formInput.description} onChange={(e) => setFormInput({...formInput, description: e.target.value})}></textarea>
                             </div>
                             <div className='form-group'> 
                                 <label for='rsrc-location'>Location*</label>
-                                <input type='text' id='rsrc-location' placeholder='Address or area' required></input>
+                                <input type='text' id='rsrc-location' placeholder='Address or area' required value={formInput.address} onChange={(e) => setFormInput({...formInput, address: e.target.value})}></input>
                             </div>
                             <div className='form-group'>
                                 <label for='rsrc-type'>Resource Type*</label>
                                 {/* <p>Hold Control or Command to select multiple</p> */}
-                                <select id='rsrc-type' required multiple>
+                                <select id='rsrc-type' required multiple value={formInput.type} onChange={(e) => setFormInput({...formInput, type: Array.from(e.target.selectedOptions, (currOpt) => currOpt.value)})}>
                                     <option value="">-- Select Type --</option>
                                     <option value="Food">Food</option>
                                     <option value="Water">Water</option>
@@ -100,13 +144,13 @@ function ResourcePage() {
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
-                                <div className='form-group'> 
+                                <div className='form-group'>
                                 <label for='rsrc-dates'>Dates Available</label>
-                                <input type='text' id='rsrc-dates' placeholder='e.g., April 23-20, or Ongoing'></input>
+                                <input type='text' id='rsrc-dates' placeholder='e.g., April 23-20, or Ongoing' required value={formInput.hours} onChange={(e) => setFormInput({...formInput, hours: e.target.value})}></input>
                             </div>
                             <div className='form-group'>
                                 <label for='rsrc-contact'>Contact Information</label>
-                                <input type='text' id='rsrc-contact' placeholder='Phone number, email, or website'></input>
+                                <input type='text' id='rsrc-contact' placeholder='Phone number, email, or website' required value={formInput.contact} onChange={(e) => setFormInput({...formInput, contact: e.target.value})}></input>
                             </div>
                             <div className='form-actions'>
                                 <button className='cancel-btn rsrc-btn' onClick={toggleForm}>CANCEL</button>
