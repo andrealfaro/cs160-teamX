@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import logo from '../assets/fire-logo.png'
 import '../styles/header.css';
 
+import loginWithGoogle from './AppwriteAuth';
 function Header() { 
     return ( 
         <div className='header'>
@@ -37,8 +38,8 @@ function Header() {
                 </select>
             </div> */}
             <div className='signlog-container'>
-                <button className='signup btn'>SIGNUP</button>
-                <button className='login btn'>LOGIN</button>
+                <button className='login btn' onClick={loginWithGoogle}>LOGIN</button>
+                {/* <GoogleLoginButton /> */}
             </div>
         </div>
     )
