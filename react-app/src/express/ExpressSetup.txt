@@ -1,0 +1,1 @@
+In this directory, I ran npm install express cors fs. This may be required to run on other devices.

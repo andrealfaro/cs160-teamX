@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useEffect, useState } from 'react'; 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/resource.css';
@@ -51,6 +51,12 @@ function ResourcePage() {
         timePosted: ''
     });
 
+    useEffect(() => {
+        fetch('http://localhost:5000/api/resources').then(res => res.json()).then(data => {
+            setAllResources(data);
+        })
+    });
+
     const doPostFormUpdate = (e) => {
         e.preventDefault();
         
@@ -67,7 +73,15 @@ function ResourcePage() {
             timePosted: formInput.timePosted
         };
 
-        setAllResources(prev => [rToAdd, ...prev]);
+        // setAllResources(prev => [rToAdd, ...prev]);
+        fetch('http://localhost:5000/api/resources', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(rToAdd)
+        }).then(() => {
+            setAllResources(prev => [rToAdd, ...prev]);
+        });
+
         setFormInput({ title: '',
             postedBy: '',
             description: '',
