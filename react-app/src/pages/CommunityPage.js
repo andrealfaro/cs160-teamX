@@ -214,59 +214,66 @@ function CommunityPage() {
     });
 
     return (
-        <div>
+        <div className='main-container'>
             <Header/>
-            <h1>Community Contact Page</h1>
-            <div className="com-filter-bar">
-                <div className="filter-groups">
-                    {[
-                    { group: 'resource-type', title: 'Community Resource Type', options: ['All','Emergency','Shelter','Medical','Preparation','Recovery','Mutual Aid','Animal','Mental Health'] }
-                    ].map(({ group, title, options }) => (
-                    <div key={group} className={`filter-group ${group}`}>
-                        <h4>{title}</h4>
-                        <div className="filter-options">
-                        {options.map((opt, i) => (
-                            <span key={i} className={`filter-tag ${filters[group] == opt ? 'active' : ''}`} onClick={(e) => handleFilterClick(e, group)}>{opt}</span>
-                        ))}
-                        </div>
-                    </div>
-                    ))}
+            <div className='community-content-container'>
+              <div className="title-section">
+                <div className='comm-title'>
+                    <h1>Community Contacts</h1>
+                    <p>Find and connect with local and government organizations.</p>
                 </div>
+              </div>
+              <div className="com-filter-bar">
+                  <div className="filter-groups">
+                      {[
+                      { group: 'resource-type', title: 'Community Resource Type', options: ['All','Emergency','Shelter','Medical','Preparation','Recovery','Mutual Aid','Animal','Mental Health'] }
+                      ].map(({ group, title, options }) => (
+                      <div key={group} className={`filter-group ${group}`}>
+                          <h4>{title}</h4>
+                          <div className="filter-options">
+                          {options.map((opt, i) => (
+                              <span key={i} className={`filter-tag ${filters[group] == opt ? 'active' : ''}`} onClick={(e) => handleFilterClick(e, group)}>{opt}</span>
+                          ))}
+                          </div>
+                      </div>
+                      ))}
+                  </div>
 
-                <div className="search-bar">
-                    <input type="text" placeholder="Search resources..." value={searchInput} onChange={handleSearchInputChange} onKeyDown={(e) => {if (e.key === 'Enter') {handleSearchClick();}}}/>
-                    <button className="search-btn" onClick={handleSearchClick}>Search</button>
-                </div>
+                  <div className="search-bar">
+                      <input type="text" placeholder="Search resources..." value={searchInput} onChange={handleSearchInputChange} onKeyDown={(e) => {if (e.key === 'Enter') {handleSearchClick();}}}/>
+                      <button className="search-btn" onClick={handleSearchClick}>Search</button>
+                  </div>
+              </div>
+
+              
+              {sectionTitles.map(({ type, title }) => {
+              const resourcesInSection = filteredResources.filter(r => r.type === type);
+              if (resourcesInSection.length === 0) return null;
+              return (
+                  <div key={type}>
+                  <h2 className="center-text">{title}</h2>
+                  <div className="community-container">
+                      {resourcesInSection.map(r => (
+                      <div key={r.id} className="community-card">
+                          <div className="resource-icon">{r.icon}</div>
+                          <h3>{r.name}</h3>
+                          {r.description && <p>{r.description}</p>}
+                          {r.phone && <p>{r.phone}</p>}
+                          {r.link && (
+                          <button
+                              className="community-btn"
+                              onClick={() => window.open(r.link, "_blank")}
+                          >
+                              Go to Website
+                          </button>
+                          )}
+                      </div>
+                      ))}
+                  </div>
+                  </div>
+              );
+              })}
             </div>
-
-            
-            {sectionTitles.map(({ type, title }) => {
-            const resourcesInSection = filteredResources.filter(r => r.type === type);
-            if (resourcesInSection.length === 0) return null;
-            return (
-                <div key={type}>
-                <h2 className="center-text">{title}</h2>
-                <div className="community-container">
-                    {resourcesInSection.map(r => (
-                    <div key={r.id} className="community-card">
-                        <div className="resource-icon">{r.icon}</div>
-                        <h3>{r.name}</h3>
-                        {r.description && <p>{r.description}</p>}
-                        {r.phone && <p>{r.phone}</p>}
-                        {r.link && (
-                        <button
-                            className="community-btn"
-                            onClick={() => window.open(r.link, "_blank")}
-                        >
-                            Go to Website
-                        </button>
-                        )}
-                    </div>
-                    ))}
-                </div>
-                </div>
-            );
-            })}
             <Footer/>
 
         </div>

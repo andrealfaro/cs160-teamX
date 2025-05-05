@@ -1,3 +1,29 @@
+.main-container { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.community-content-container { 
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.title-section { 
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 100px;
+    padding-left: 100px;
+    width: 85%;
+    margin-bottom: 20px;
+}
+
 .community-container { 
     display: flex; 
     flex-direction: row; 
@@ -34,6 +60,7 @@
     font-weight: bold;
     margin-top: 1rem;
     transition: background 0.3s ease;
+    border: none;
 }
 
 .community-btn:hover {
@@ -42,18 +69,17 @@
 
 .center-text {
     text-align: center;
-  }
+}
 
-  .com-filter-bar {
+.com-filter-bar {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     padding: 20px;
     margin: 0 auto 2rem;
-    width: fit-content;
+    width: 70%;
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    
 }
 
 .filter-groups {
