@@ -31,11 +31,15 @@
     width: 150px;
 }
 
+.clear-filters-btn {
+    width: 100px;
+}
+
 .search-btn { 
     width: 100px;
 }
 
-.post-rsrc, .submit-btn, .search-btn{ 
+.post-rsrc, .submit-btn, .search-btn, .clear-filters-btn{ 
     display: inline-block;
     background: #fa4c00;
     color: white;

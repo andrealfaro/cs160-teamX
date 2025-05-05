@@ -36,6 +36,9 @@ function ResourcePage() {
     const [resourceDates, setResourceDates] = useState('');
     const [resourceContact, setResourceContact] = useState('');
 
+    const [searchInput, setSearchInput] = useState('');
+    const [nogginFilerRes, setNogginFilterRes] = useState(false);
+
     const [activeFilters, setActiveFilters] = useState({
         'resource-type': 'All',
         'location': 'All Areas',
@@ -155,6 +158,66 @@ function ResourcePage() {
         return true;
     });
 
+    const doNogginSearch = async() => {
+        const allResourceInfo = resources.map((r, i) => `${i}. Title: ${r.title}, Posted By: ${r.postedBy}, Description: ${r.description}, Address: ${r.address}, Location: ${r.location}, Hours: ${r.hours}, Contact: ${r.contact}, Type: ${r.type}, Status: ${r.status}, Time Posted: ${r.timePosted}`).join('\n');
+
+        const response = await fetch(
+            'https://noggin.rea.gent/surviving-iguana-8198',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer rg_v1_ytcfh8iyego2i3i5di2npzebv2jwtr8blzq5_ngk',
+                },
+                body: JSON.stringify({
+                    // fill variables here.
+                    "prompt": allResourceInfo,
+                    "request": searchInput,
+                }),
+            });
+            
+            const text = await response.text();
+            const indices = text.match(/\d+/g).map(Number);
+
+            const nogginResultsBools = indices.map(i => resources[i]).filter(Boolean);
+            setNogginFilterRes(nogginResultsBools);
+    };
+
+    const filterLogic = (resources) => {
+        return resources.filter(resource => {
+            // filter by type
+            const typeFilter = activeFilters['resource-type'];
+            if (typeFilter !== 'All' && (!resource.type || !Array.isArray(resource.type) || !resource.type.includes(typeFilter))) {
+                return false;
+            }
+    
+            //filter by location
+            const locationFilter = activeFilters['location'];
+            if (locationFilter !== 'All Areas' && (!resource.location || resource.location !== locationFilter)) {
+                return false; 
+            }
+    
+            // filter by status
+            const statusFilter = activeFilters['status'];
+            if (statusFilter !== 'All') {
+                 console.warn("Status filtering is not yet implemented in resource data.");
+            }
+    
+            // all filters passed
+            return true;
+        })};
+
+    const finalResultsToShow = nogginFilerRes.length > 0 ? filterLogic(nogginFilerRes) : filterLogic(filteredResources);
+
+    const clearFiltersFunc = () => {
+        setActiveFilters({
+            'resource-type': 'All',
+            'location': 'All Areas',
+            'status': 'All' 
+        });
+        setSearchInput('');
+        setNogginFilterRes([]);
+    };
 
     return (
         <div className='main-container'>
@@ -265,6 +328,7 @@ function ResourcePage() {
                 )}
 
                 <div className="rsrc-filter-bar">
+                    <button className='clear-filters-btn' onClick={clearFiltersFunc}> Clear Filters </button>
                     <div className="rsrc-filter-groups">
                          {[
                          { group: 'resource-type', title: 'Resource Type', options: ['All','Food','Water','Medical','Shelter','Clothing','Financial','Cleanup','Supplies','Transportation'] },
@@ -289,16 +353,16 @@ function ResourcePage() {
                     </div>
                     <div className="search-bar">
                         {/* TODO: Implement search functionality */}
-                        <input type="text" placeholder="Search resources..." />
-                        <button className="search-btn">Search</button>
+                        <input type="text" value={searchInput} placeholder="Search resources..." onChange={(x) => setSearchInput(x.target.value)}/>
+                        <button className="search-btn" onClick={doNogginSearch}>Search</button>
                     </div>
                 </div>
 
                 <div className='rsrc-posts'>
-                    {filteredResources.length === 0 ? (
+                    {finalResultsToShow.length === 0 ? (
                          <p>No resources found matching your criteria. Try adjusting your filters!</p>
                     ) : (
-                        filteredResources.map((resource) => (
+                        finalResultsToShow.map((resource) => (
                             <div key={resource.id} className='rsrc-card'>
                                 <div className='rsrc-header'>
                                     <h3>{resource.title}</h3>
