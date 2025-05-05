@@ -62,6 +62,6 @@ button:hover {
     margin-left: 20px;
 }
 
-p {
+#welcome-message {
     color: white;
 }
