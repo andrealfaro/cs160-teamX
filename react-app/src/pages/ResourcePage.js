@@ -334,7 +334,7 @@ function ResourcePage() {
                     )}
                 </div>
             </div>
-            <Footer /> {/* Include the Footer component */}
+            <Footer /> 
         </div>
     );
 };

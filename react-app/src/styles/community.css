@@ -4,6 +4,7 @@
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom: 20px;
+    color: black;
 }
 
 .community-card { 
@@ -19,6 +20,7 @@
     justify-content: center;
     overflow: hidden;
     align-items: center;
+    color: black;
 }
 
 .community-btn {
@@ -41,3 +43,70 @@
 .center-text {
     text-align: center;
   }
+
+  .com-filter-bar {
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 0 auto 2rem;
+    width: fit-content;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    
+}
+
+.filter-groups {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+    padding: 15px;
+}
+
+.filter-group h4 {
+    margin-top: 0px;
+    margin-bottom: 15px;
+}
+
+.filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.filter-tag {
+    background: #e9ecef;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-tag:hover {
+    background: #dee2e6;
+}
+
+.filter-tag.active {
+    background: #fa4c00;
+    color: white;
+}
+
+.search-bar {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+}

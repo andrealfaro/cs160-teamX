@@ -13,6 +13,7 @@ function HomePage() {
                 const lon = currPos.coords.longitude;
                 const apiKey = "a05610bc6dd9531e9c80d075e39ca6fc";
                 const url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+                const url2 = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=2&appid=${apiKey}`;
 
                 fetch (url)
                     .then((data) => {
@@ -30,6 +31,14 @@ function HomePage() {
                         advice: advice[currAQI - 1]
                     });
                 });
+
+                fetch (url2)
+                    .then((data) => {
+                    return data.json(); 
+                })
+                .then((json) => {
+                    document.getElementById("location").textContent = json[0].name + ", " + json[0].state;         
+                });
             })
         }
     }, []);
@@ -39,7 +48,7 @@ function HomePage() {
             <Header />
             <div className='content-container'>
                 <div className='current-conditions'>
-                    <h2>Current Conditions</h2>
+                    <h2>Current Conditions in <span id='location'>Loading...</span></h2>
                     <div className='conditions-container'>
                         <div className='condition-card' id='air'>
                             <h3>
