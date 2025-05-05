@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import '../styles/resource.css'
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useAuth } from '../components/AuthContext.jsx';
 
 const formatRelativeTime = (date) => {
     if (!date) return 'Time N/A'; 
@@ -26,6 +27,8 @@ const formatRelativeTime = (date) => {
 
 
 function ResourcePage() {
+    const { user, loading } = useAuth();
+    
     const [showForm, setShowForm] = useState(false);
     const [resources, setResources] = useState([]); 
 
@@ -117,7 +120,8 @@ function ResourcePage() {
                 datesAvailable: resourceDates,
                 contact: resourceContact,
                 timestamp: serverTimestamp(), 
-                postedBy: 'Anonymous', // default value 
+                userId: user, // store user ID if logged in 
+                postedBy: user.name || 'Anonymous', // default to anonymous
                 helpfulCount: 0,
                 shareCount: 0,
                 savedBy: [],
@@ -228,10 +232,12 @@ function ResourcePage() {
                         <h1>Available Resources</h1>
                         <p>Find or share resources in your community.</p>
                     </div>
-                    <button onClick={toggleForm} className='post-rsrc btn'>+ POST NEW RESOURCE</button>
+                    {!loading && user && (
+                        <button onClick={toggleForm} className='post-rsrc btn'>+ POST NEW RESOURCE</button>
+                    )}                
                 </div>
                 {/* new resource post */}
-                {showForm && (
+                {showForm && user && (
                     <div className='rsrc-post-container'>
                         <form className='rsrc-post-form' onSubmit={handlePostResource}>
                             <h3>Share a Resource</h3>
@@ -368,8 +374,8 @@ function ResourcePage() {
                                     <h3>{resource.title}</h3>
                                 </div>
                                 <div className='rsrc-meta'>
-                                    <span id='post-by'>Posted by: {resource.postedBy || 'Anonymous'} </span>
                                     <span id='post-time'>{formatRelativeTime(resource.createdAt)}</span>
+                                    <span id='post-by'>Posted by: {resource.postedBy || 'Anonymous'} </span>
                                 </div>
                                 <p>{resource.description}</p>
                                 {resource.location && <p><strong>Location:</strong> {resource.location}</p>}
@@ -387,8 +393,8 @@ function ResourcePage() {
                                 <div className="resource-actions">
                                     <div className="action-btns">
                                         <div className='helpful-share'>
-                                            <button className="action-btn">👍 Helpful ({resource.helpfulCount || 0})</button>
-                                            <button className="action-btn">💬 Share ({resource.shareCount || 0})</button>
+                                            <button className="action-btn">✅ Verify ({resource.helpfulCount || 0})</button>
+                                            <button className="action-btn">💬 Share</button>
                                         </div>
                                         <button className="action-btn">📌 Save</button>
                                     </div>

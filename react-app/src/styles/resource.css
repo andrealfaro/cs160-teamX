@@ -11,6 +11,7 @@
     flex-direction: column;
     width: 100%;
     align-items: center;
+    margin-bottom: 40px;
 }
 
 .title-section { 
@@ -21,6 +22,7 @@
     padding-right: 100px;
     padding-left: 100px;
     width: 85%;
+    margin-bottom: 20px;
 }
 
 .post-rsrc { 
@@ -177,7 +179,7 @@
     font-size: 1rem;
 }
 
-.rsrc-posts {
+/* .rsrc-posts {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -197,17 +199,49 @@
     overflow: hidden;
     width: 40%;
     margin-bottom: 10px;
+    min-height: 350px;
+    max-height: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+} */
+
+.rsrc-posts {
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    justify-items: stretch;
+    margin-bottom: 20px;
+}
+
+.rsrc-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 1rem;
+    overflow: hidden;
+    height: 100%; /* Full height of grid cell */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .rsrc-header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.rsrc-header h3 { 
+    margin: 0;
+    font-size: 1.75rem;
 }
 
 .rsrc-meta {
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
     color: #6c757d;

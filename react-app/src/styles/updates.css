@@ -21,6 +21,7 @@
     padding-right: 100px;
     padding-left: 100px;
     width: 85%;
+    margin-bottom: 20px;
 }
 
 .update-refresh { 
@@ -150,7 +151,7 @@
 
 .upd-filter-btn {
     background: #e9ecef;
-    padding: 0.25rem 0.75rem;
+    padding: 0.30rem 0.80rem;
     border-radius: 16px;
     font-size: 0.9rem;
     cursor: pointer;
@@ -187,4 +188,28 @@
     overflow: hidden;
     width: 70%;
     margin-bottom: 10px;
+}
+
+.update-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.update-header h3 { 
+    margin: 0;
+    font-size: 1.75rem;
+}
+
+.update-header span { 
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.update-meta {
+    display: flex;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #6c757d;
 }

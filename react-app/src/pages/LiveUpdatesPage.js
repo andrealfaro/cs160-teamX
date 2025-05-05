@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/updates.css'
-
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase'; 
+import { useAuth } from '../components/AuthContext.jsx';
 
 // format time as 'x time ago' for update cards
 const formatRelativeTime = (date) => {
@@ -43,6 +43,8 @@ const formatSpecificDateTime = (date) => {
 
 
 function LiveUpdatesPage() {
+    const { user, loading } = useAuth();
+    
     const [showForm, setShowForm] = useState(false);
     const toggleForm = () => setShowForm(!showForm);
 
@@ -84,7 +86,8 @@ function LiveUpdatesPage() {
                 type: updateType, 
                 source: sourceInfo,
                 timestamp: serverTimestamp(),
-                postedBy: 'Anonymous', // default value
+                userId: user, // store user ID if logged in
+                postedBy: user.name || 'Anonymous', // default to anonymous
                 helpfulCount: 0,
                 shareCount: 0,
                 savedBy: [],
@@ -170,7 +173,9 @@ function LiveUpdatesPage() {
                         <p>Last updated: {lastUpdatedDisplay}</p>
                     </div>
                     <div className='update-refresh'>
-                        <button onClick={toggleForm} className='post-update btn'>+ POST NEW UPDATE</button>
+                        {!loading && user && (
+                            <button onClick={toggleForm} className='post-update btn'>+ POST NEW UPDATE</button>
+                        )}
                         <button className='refresh-update btn' onClick={() => {}}>Refresh Updates</button>
                     </div>
                 </div>
@@ -181,7 +186,7 @@ function LiveUpdatesPage() {
                     <p><strong>Note:</strong> This is a community-driven platform. Please verify information before acting on it.</p>
                 </div>
                 {/* new update post */}
-                {showForm && (
+                {showForm && user && (
                     <div className='upd-post-container'>
                         <form className='upd-post-form' onSubmit={handlePostUpdate}>
                             <h3>Share an Update</h3>
@@ -288,10 +293,10 @@ function LiveUpdatesPage() {
                             <div className='update-card' key={update.id}> 
                                 <div className='update-header'>
                                     <h3>{update.title}</h3>
+                                    <span id='post-time'>{formatRelativeTime(update.createdAt)}</span>
                                 </div>
                                 <div className='update-meta'>
                                     <span id='post-by'>Posted by: {update.postedBy || 'Anonymous'}</span>
-                                    <span id='post-time'>{formatRelativeTime(update.createdAt)}</span>
                                 </div>
                                 <p>{update.description}</p>
                                 {update.location && <p><strong>Location:</strong> {update.location}</p>}
@@ -305,8 +310,8 @@ function LiveUpdatesPage() {
                                 <div className="update-actions">
                                     <div className="action-btns">
                                         <div className='helpful-share'>
-                                            <button className="action-btn">👍 Helpful ({update.helpfulCount || 0})</button>
-                                            <button className="action-btn">💬 Share ({update.shareCount || 0})</button>
+                                            <button className="action-btn">✅ Verify ({update.helpfulCount || 0})</button>
+                                            <button className="action-btn">💬 Share</button>
                                         </div>
                                         <button className="action-btn">📌 Save</button>
                                     </div>
