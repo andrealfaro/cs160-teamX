@@ -6,14 +6,22 @@ import '../styles/home.css';
 
 function HomePage() { 
     const [airState, airFunc] = useState(null);
+    const [nwsState, setNwsFunc] = useState(null);
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((currPos) => {
-                const lat = currPos.coords.latitude;
-                const lon = currPos.coords.longitude;
+                const lat = currPos.coords.latitude; //47.35259539134266
+                const lon = currPos.coords.longitude; //-96.49255693382979
+
+                console.log(currPos.coords.latitude);
+                console.log(currPos.coords.longitude);
+                
+
                 const apiKey = "a05610bc6dd9531e9c80d075e39ca6fc";
                 const url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
                 const url2 = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=2&appid=${apiKey}`;
+                const url3 = `https://api.weather.gov/points/${lat},${lon}`;
+                
 
                 fetch (url)
                     .then((data) => {
@@ -37,7 +45,46 @@ function HomePage() {
                     return data.json(); 
                 })
                 .then((json) => {
+                    console.log(json[0]);
                     document.getElementById("location").textContent = json[0].name + ", " + json[0].state;         
+                });
+
+                fetch (url3)
+                    .then((data) => {
+                    return data.json(); 
+                })
+                .then((json) => {
+                    const url3_1 = json.properties.forecastZone;
+                    const zoneId = url3_1.split('/').pop();
+                    console.log(url3_1);
+                    console.log(zoneId);
+
+                    return fetch(`https://api.weather.gov/alerts/active/zone/${zoneId}`);
+                })
+                .then((data) => {
+                    return data.json();
+                })
+                .then((newJson) => {
+                    const fireFilter = newJson.features.filter(alert => {
+                        const currProperties = alert.properties;
+                        const currText = currProperties.description.toLowerCase();
+                        return currText.includes('fire') || currText.includes('wildfire');// || currText.includes('wind');
+                    });
+
+                    if (fireFilter.length > 0) {
+                        const firstAlert = fireFilter[0];
+                        setNwsFunc({
+                            headline: firstAlert.properties.headline,
+                            ends: firstAlert.properties.ends,
+                            description: firstAlert.properties.description
+                        });
+                    } else {
+                        setNwsFunc({
+                            headline: "All clear. If an alert goes into effect, this will auto-update immediately.",
+                            ends: "All clear.",
+                            description: "All clear."
+                        });
+                    }
                 });
             })
         }
@@ -71,11 +118,12 @@ function HomePage() {
                         <div className='condition-card' id='fire'>
                             <h3>
                                 <span className="status-indicator status-poor"></span>
-                                Fire Containment
+                                National Weather Service Fire Alerts
                             </h3>
-                            <p className='status'><strong>Status:</strong> 35% contained</p>
-                            <p className='advice'><strong>Area:</strong> 7,850 acres affected</p>
-                            <p className='updated'><small>Updated: Today, 06:15 AM</small></p>
+                            <p className='status'><strong>Status:</strong> {nwsState ? nwsState.headline: 'Loading...'} </p>
+                            <p className='advice'><strong>Description:</strong> {nwsState ? nwsState.description: 'Loading...'} </p>
+                            <p className='advice'><strong>Ends:</strong> {nwsState ? nwsState.ends: 'Loading...'} </p>
+                            <p className='updated'><small>Updated: Today, {airState ? airState.updated: 'Loading...'}</small></p>
                         </div>
                         <div className='condition-card' id='power'>
                             <h3>
