@@ -4,6 +4,7 @@
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom: 20px;
+    color: black;
 }
 
 .community-card { 
@@ -19,6 +20,7 @@
     justify-content: center;
     overflow: hidden;
     align-items: center;
+    color: black;
 }
 
 .community-btn {

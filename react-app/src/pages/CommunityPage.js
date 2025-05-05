@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useState } from 'react'; 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/community.css';
 
-function CommunityPage() { 
-    const [showForm, setShowForm] = useState(false); 
+function CommunityPage() {  
     const [filters, setFilters] = useState({
         'resource-type': 'All',
         location: 'All Areas',
@@ -235,7 +234,7 @@ function CommunityPage() {
                 </div>
 
                 <div className="search-bar">
-                    <input type="text" placeholder="Search resources..." value={searchInput} onChange={handleSearchInputChange}/>
+                    <input type="text" placeholder="Search resources..." value={searchInput} onChange={handleSearchInputChange} onKeyDown={(e) => {if (e.key === 'Enter') {handleSearchClick();}}}/>
                     <button className="search-btn" onClick={handleSearchClick}>Search</button>
                 </div>
             </div>
