@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/fire-logo.png'
 import '../styles/header.css';
+import { useAuth } from './AuthContext';
 
-import loginWithGoogle from './AppwriteAuth';
 function Header() { 
+    const { user, loginWithGoogle, logout, loading } = useAuth();
     return ( 
         <div className='header'>
             <div className='logo-container'>
@@ -37,10 +38,26 @@ function Header() {
                     <option value='spanish'>SPA</option>
                 </select>
             </div> */}
-            <div className='signlog-container'>
+
+            {/* <div className='signlog-container'>
 
                 <button className='login btn' onClick={loginWithGoogle}>LOGIN</button>
          
+            </div> */}
+
+            <div className="signlog-container">
+                {!loading && !user && (
+                    <div className='signlog-container'>
+                        <button className='login btn' onClick={loginWithGoogle}>LOGIN</button>
+                    </div>
+                )}
+
+                {!loading && user && (
+                    <div className='signlog-container'>
+                        <h1>Welcome, <span>{user.name || user.email}</span></h1>
+                        <button className='login btn' onClick={logout}>Logout</button>
+                    </div>
+                )}
             </div>
         </div>
     )
