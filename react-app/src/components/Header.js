@@ -38,27 +38,20 @@ function Header() {
                     <option value='spanish'>SPA</option>
                 </select>
             </div> */}
+      
+            {!loading && !user && (
+                <div className='signlog-container'>
+                    <button className='login btn' onClick={loginWithGoogle}>Log In</button>
+                </div>
+            )}
 
-            {/* <div className='signlog-container'>
-
-                <button className='login btn' onClick={loginWithGoogle}>LOGIN</button>
-         
-            </div> */}
-
-            <div className="signlog-container">
-                {!loading && !user && (
-                    <div className='signlog-container'>
-                        <button className='login btn' onClick={loginWithGoogle}>LOGIN</button>
-                    </div>
-                )}
-
-                {!loading && user && (
-                    <div className='signlog-container'>
-                        <h1>Welcome, <span>{user.name || user.email}</span></h1>
-                        <button className='login btn' onClick={logout}>Logout</button>
-                    </div>
-                )}
-            </div>
+            {!loading && user && (
+                <div className='signlog-container'>
+                    <p>Welcome, {user.name}</p>
+                    <button className='login btn' onClick={logout}>Log Out</button>
+                </div>
+            )}
+          
         </div>
     )
 }; 
