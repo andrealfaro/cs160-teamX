@@ -1,108 +1,165 @@
-import React, { useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import '../styles/resource.css';
+import '../styles/resource.css'
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
 
-function ResourcePage() { 
-    const [showForm, setShowForm] = useState(false); 
-    const [filters, setFilters] = useState({
-        'resource-type': 'All',
-        location: 'All Areas',
-        status: 'All'
-    });
-    const toggleForm = () => setShowForm(!showForm);
+const formatRelativeTime = (date) => {
+    if (!date) return 'Time N/A'; 
 
-    const [allResources, setAllResources] = useState([
-    {
-        title: "Water Distribution at City Hall",
-        postedBy: "John Doe",
-        description: "Clean bottled water available for all affected residents. Bring containers for additional water. Each household can receive up to 5 gallons. ID not required.",
-        address: "2375 Ridge Road, North County",
-        location: "North County",
-        hours: "8:00 AM - 8:00 PM daily through April 30",
-        contact: "555-234-5678",
-        type: "Water",
-        status: "Official",
-        timePosted: "1 hour ago"
-    },
-    /*{
-        title: "Food Distribution at Regional Food Bank",
-        postedBy: "Aaron Donald",
-        description: "Bottled water and meal for everyone. ID required.",
-        address: "1734 East 41st Street, Los Angeles, CA 90058",
-        location: "East Side",
-        hours: "8:00 AM - 12:00 PM daily through May 5",
-        contact: "323-234-3030",
-        type: "Food",
-        status: "Official",
-        timePosted: "15 mins ago"*/
-    ]);
+    const now = new Date();
+    const diffInSeconds = Math.round((now.getTime() - date.getTime()) / 1000);
 
-    const [formInput, setFormInput] = useState({
-        title: '',
-        postedBy: '',
-        description: '',
-        address: '',
-        location: '',
-        hours: '',
-        contact: '',
-        type: 'Water',
-        status: '',
-        timePosted: ''
-    });
-
-    const doPostFormUpdate = (e) => {
-        e.preventDefault();
-        
-        const rToAdd = {
-            title: formInput.title,
-            postedBy: formInput.postedBy,
-            description: formInput.description,
-            address: formInput.address,
-            location: formInput.location,
-            hours: formInput.hours,
-            contact: formInput.contact,
-            type: formInput.type,
-            status: formInput.status,
-            timePosted: formInput.timePosted
-        };
-
-        setAllResources(prev => [rToAdd, ...prev]);
-        setFormInput({ title: '',
-            postedBy: '',
-            description: '',
-            address: '',
-            location: '',
-            hours: '',
-            contact: '',
-            type: 'Water',
-            status: '',
-            timePosted: ''});
-        setShowForm(false);
+    if (diffInSeconds < 60) {
+        return 'just now';
+    } else if (diffInSeconds < 3600) { // less than 1 hour
+        const minutes = Math.floor(diffInSeconds / 60);
+        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    } else if (diffInSeconds < 86400) { // less than 24 hours
+        const hours = Math.floor(diffInSeconds / 3600);
+        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else { // 24 hours or more (date format)
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
+};
 
-    const handleFilterClick = (e, group) => {
-        /*const siblings = document.querySelectorAll(`.${group} .filter-tag`);
-        siblings.forEach(sib => sib.classList.remove('active'));
-        e.target.classList.add('active');*/
-        const currSelected = e.target.textContent;
-        setFilters(temp => ({
-            ...temp,
-            [group]: currSelected
-        }));
-      };
 
-    const filteredResources = allResources.filter(currR => {
-        const sameType = filters['resource-type'] == 'All' || filters['resource-type'] == currR.type;
-        const sameLoc = filters.location == 'All Areas' || filters.location == currR.location;
-        const sameStatus = filters.status == 'All' || filters.status == currR.status;
-        return sameType && sameLoc && sameStatus;
+function ResourcePage() {
+    const [showForm, setShowForm] = useState(false);
+    const [resources, setResources] = useState([]); 
+
+    const [resourceTitle, setResourceTitle] = useState('');
+    const [resourceDescription, setResourceDescription] = useState('');
+    const [resourceLocation, setResourceLocation] = useState('');
+    const [resourceType, setResourceType] = useState([]); 
+    const [resourceDates, setResourceDates] = useState('');
+    const [resourceContact, setResourceContact] = useState('');
+
+    const [activeFilters, setActiveFilters] = useState({
+        'resource-type': 'All',
+        'location': 'All Areas',
+        'status': 'All' 
     });
+
+    const resetForm = () => {
+        setResourceTitle('');
+        setResourceDescription('');
+        setResourceLocation('');
+        setResourceType([]);
+        setResourceDates('');
+        setResourceContact('');
+    };
+
+    // toggle form visibility and reset inputs 
+    const toggleForm = () => {
+        if (showForm) {
+            resetForm(); 
+        }
+        setShowForm(!showForm);
+    };
+
+    const handleFilterClick = (group, option) => {
+        setActiveFilters(prevFilters => ({
+            ...prevFilters,
+            [group]: option
+        }));
+    };
+
+    useEffect(() => {
+        // fetch documents from the 'resources' collection, ordered by by most recent 
+        const q = query(collection(db, 'resources'), orderBy('timestamp', 'desc'));
+
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const resourcesArray = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const createdAtDate = data.timestamp?.toDate();
+
+                if(createdAtDate) {
+                   resourcesArray.push({
+                       id: doc.id,
+                       ...data,
+                       createdAt: createdAtDate,
+                   });
+                } else {
+                    console.warn(`Resource document ${doc.id} is missing a valid timestamp or was pending.`);
+                }
+            });
+            setResources(resourcesArray);
+            console.log("Resources fetched:", resourcesArray); 
+        }, (error) => {
+            console.error("Error fetching resources: ", error);
+        });
+
+        return () => unsubscribe();
+    }, []); 
+
+    // save new resources
+    const handlePostResource = async (e) => {
+        e.preventDefault(); 
+
+        // basic validation - make sure form isn't empty
+        if (!resourceTitle || !resourceDescription || !resourceLocation || resourceType.length === 0) {
+            alert('Please fill in all required fields (Title, Description, Location, Resource Type)');
+            return;
+        }
+
+        try {
+            await addDoc(collection(db, "resources"), {
+                title: resourceTitle,
+                description: resourceDescription,
+                location: resourceLocation,
+                type: resourceType, 
+                datesAvailable: resourceDates,
+                contact: resourceContact,
+                timestamp: serverTimestamp(), 
+                postedBy: 'Anonymous', // default value 
+                helpfulCount: 0,
+                shareCount: 0,
+                savedBy: [],
+            });
+
+            console.log("Resource successfully posted!");
+
+            resetForm();
+            setShowForm(false);
+        } catch (error) {
+            console.error("Error posting resource: ", error);
+            alert("There was an error posting your resource. Please try again.");
+        }
+    };
+
+
+    // filter resources based on type tags
+    const filteredResources = resources.filter(resource => {
+        // filter by type
+        const typeFilter = activeFilters['resource-type'];
+        if (typeFilter !== 'All' && (!resource.type || !Array.isArray(resource.type) || !resource.type.includes(typeFilter))) {
+            return false;
+        }
+
+        //filter by location
+        const locationFilter = activeFilters['location'];
+        if (locationFilter !== 'All Areas' && (!resource.location || resource.location !== locationFilter)) {
+            return false; 
+        }
+
+        // filter by status
+        const statusFilter = activeFilters['status'];
+        if (statusFilter !== 'All') {
+             console.warn("Status filtering is not yet implemented in resource data.");
+        }
+
+        // all filters passed
+        return true;
+    });
+
 
     return (
         <div className='main-container'>
             <Header/>
-            <div className='resource-content-container'> 
+            <div className='resource-content-container'>
                 <div className='title-section'>
                     <div className='rsrc-title'>
                         <h1>Available Resources</h1>
@@ -112,26 +169,61 @@ function ResourcePage() {
                 </div>
                 {/* new resource post */}
                 {showForm && (
-                    <div className='post-container'>
-                        <form className='post-form' onSubmit={doPostFormUpdate}>
+                    <div className='rsrc-post-container'>
+                        <form className='rsrc-post-form' onSubmit={handlePostResource}>
                             <h3>Share a Resource</h3>
-                            <div className='form-group'>
-                                <label for='rsrc-title'>Resource Title*</label>
-                                <input type='text' id='rsrc-title' placeholder='e.g., Food Drive at Community Center' required value={formInput.title} onChange={(e) => setFormInput({...formInput, title: e.target.value})}></input>
+                            <div className='rsrc-form-group'>
+                                <label htmlFor='rsrc-title'>Resource Title*</label>
+                                <input
+                                    type='text'
+                                    id='rsrc-title'
+                                    placeholder='e.g., Food Drive at Community Center'
+                                    required
+                                    value={resourceTitle}
+                                    onChange={(e) => setResourceTitle(e.target.value)}
+                                ></input>
                             </div>
-                            <div className='form-group'>
-                                <label for='rsrc-description'>Description*</label>
-                                <textarea id='resrc-description' placeholder='Provide details about the resource, availability, requirements, etc.' required value={formInput.description} onChange={(e) => setFormInput({...formInput, description: e.target.value})}></textarea>
+                            <div className='rsrc-form-group'>
+                                <label htmlFor='resrc-description'>Description*</label>
+                                <textarea
+                                    id='resrc-description'
+                                    placeholder='Provide details about the resource, availability, requirements, etc.'
+                                    required
+                                    value={resourceDescription}
+                                    onChange={(e) => setResourceDescription(e.target.value)}
+                                ></textarea>
                             </div>
-                            <div className='form-group'> 
-                                <label for='rsrc-location'>Location*</label>
-                                <input type='text' id='rsrc-location' placeholder='Address or area' required value={formInput.address} onChange={(e) => setFormInput({...formInput, address: e.target.value})}></input>
+                            <div className='rsrc-form-group'>
+                                <label htmlFor='rsrc-location'>Location*</label>
+                                <input
+                                    type='text'
+                                    id='rsrc-location'
+                                    placeholder='Address or area'
+                                    required
+                                    value={resourceLocation}
+                                    onChange={(e) => setResourceLocation(e.target.value)}
+                                ></input>
                             </div>
-                            <div className='form-group'>
-                                <label for='rsrc-type'>Resource Type*</label>
-                                {/* <p>Hold Control or Command to select multiple</p> */}
-                                <select id='rsrc-type' required multiple value={formInput.type} onChange={(e) => setFormInput({...formInput, type: Array.from(e.target.selectedOptions, (currOpt) => currOpt.value)})}>
-                                    <option value="">-- Select Type --</option>
+                            <div className='rsrc-form-group'>
+                                <label htmlFor='rsrc-type'>Resource Type*</label>
+                                <p>Hold Control or Command to select multiple</p>
+                                <select
+                                    id='rsrc-type'
+                                    required
+                                    multiple
+                                    value={resourceType}
+                                    onChange={(e) => {
+                                        const options = e.target.options;
+                                        const selectedValues = [];
+                                        for (let i = 0; i < options.length; i++) {
+                                            if (options[i].selected) {
+                                                selectedValues.push(options[i].value);
+                                            }
+                                        }
+                                        setResourceType(selectedValues);
+                                    }}
+                                >
+                                    <option value="" disabled>-- Select Type --</option>
                                     <option value="Food">Food</option>
                                     <option value="Water">Water</option>
                                     <option value="Medical">Medical</option>
@@ -144,81 +236,108 @@ function ResourcePage() {
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
-                                <div className='form-group'>
-                                <label for='rsrc-dates'>Dates Available</label>
-                                <input type='text' id='rsrc-dates' placeholder='e.g., April 23-20, or Ongoing' required value={formInput.hours} onChange={(e) => setFormInput({...formInput, hours: e.target.value})}></input>
+                            <div className='rsrc-form-group'>
+                                <label htmlFor='rsrc-dates'>Dates Available</label>
+                                <input
+                                    type='text'
+                                    id='rsrc-dates'
+                                    placeholder='e.g., April 23-20, or Ongoing'
+                                    value={resourceDates}
+                                    onChange={(e) => setResourceDates(e.target.value)}
+                                ></input>
                             </div>
-                            <div className='form-group'>
-                                <label for='rsrc-contact'>Contact Information</label>
-                                <input type='text' id='rsrc-contact' placeholder='Phone number, email, or website' required value={formInput.contact} onChange={(e) => setFormInput({...formInput, contact: e.target.value})}></input>
+                            <div className='rsrc-form-group'>
+                                <label htmlFor='rsrc-contact'>Contact Information</label>
+                                <input
+                                    type='text'
+                                    id='rsrc-contact'
+                                    placeholder='Phone number, email, or website'
+                                    value={resourceContact}
+                                    onChange={(e) => setResourceContact(e.target.value)}
+                                ></input>
                             </div>
-                            <div className='form-actions'>
-                                <button className='cancel-btn rsrc-btn' onClick={toggleForm}>CANCEL</button>
-                                <button className='submit-btn rsrc-btn'>POST RESOURCE</button>
+                            <div className='rsrc-form-actions'>
+                                <button type="button" className='cancel-btn rsrc-btn' onClick={toggleForm}>CANCEL</button>
+                                <button type="submit" className='submit-btn rsrc-btn'>POST RESOURCE</button>
                             </div>
                         </form>
                     </div>
                 )}
 
-                <div className="filter-bar">
-                    <div className="filter-groups">
-                        {[
-                        { group: 'resource-type', title: 'Resource Type', options: ['All','Food','Water','Medical','Shelter','Clothing','Financial','Cleanup','Supplies','Transportation'] },
-                        { group: 'location', title: 'Location', options: ['All Areas','North County','Downtown','East Side','South Hills','West Valley'] },
-                        { group: 'status', title: 'Status', options: ['All','Verified','Urgent','Active'] }
-                        ].map(({ group, title, options }) => (
-                        <div key={group} className={`filter-group ${group}`}>
-                            <h4>{title}</h4>
-                            <div className="filter-options">
-                            {options.map((opt, i) => (
-                                <span key={i} className={`filter-tag ${filters[group] == opt ? 'active' : ''}`} onClick={(e) => handleFilterClick(e, group)}>{opt}</span>
+                <div className="rsrc-filter-bar">
+                    <div className="rsrc-filter-groups">
+                         {[
+                         { group: 'resource-type', title: 'Resource Type', options: ['All','Food','Water','Medical','Shelter','Clothing','Financial','Cleanup','Supplies','Transportation'] },
+                         { group: 'location', title: 'Location', options: ['All Areas','North County','Downtown','East Side','South Hills','West Valley'] },
+                         { group: 'status', title: 'Status', options: ['All','Verified','Urgent','Active'] }
+                         ].map(({ group, title, options }) => (
+                         <div key={group} className={`rsrc-filter-group ${group}`}>
+                             <h4>{title}</h4>
+                             <div className="rsrc-filter-options">
+                             {options.map((opt, i) => (
+                                 <span
+                                     key={i}
+                                     className={`rsrc-filter-tag ${activeFilters[group] === opt ? 'active' : ''}`}
+                                     onClick={() => handleFilterClick(group, opt)} 
+                                 >
+                                     {opt}
+                                 </span>
+                             ))}
+                             </div>
+                         </div>
                             ))}
-                            </div>
-                        </div>
-                        ))}
                     </div>
-
                     <div className="search-bar">
+                        {/* TODO: Implement search functionality */}
                         <input type="text" placeholder="Search resources..." />
                         <button className="search-btn">Search</button>
                     </div>
                 </div>
 
                 <div className='rsrc-posts'>
-                    {filteredResources.map((r, i) => (
-                        <div key={i} className='rsrc-card'>
-                            <div className='rsrc-header'>
-                                <h3>{r.title}</h3>
-                            </div>
-                            <div className='rsrc-meta'>
-                                <span id='post-by'>Posted by: {r.postedBy}</span>
-                                <span id='post-time'>{r.timePosted}</span>
-                            </div>
-                            <p>{r.description}</p>
-                            <p><strong> Location: </strong> {r.address} </p>
-                            <p><strong> Hours: </strong> {r.hours} </p>
-                            <p><strong> Contact: </strong> {r.contact} </p>
-                            <div className="tag-list">
-                                <span className="tag">{r.status}</span>
-                                <span className="tag">{r.type}</span>
-                                <span className="tag">{r.location}</span>
-                            </div>
-                            <div className="resource-actions">
-                                <div className="action-btns">
-                                    <div className='helpful-share'>
-                                        <button className="action-btn">👍 Helpful (45)</button>
-                                        <button className="action-btn">💬 Share (12)</button>
+                    {filteredResources.length === 0 ? (
+                         <p>No resources found matching your criteria. Try adjusting your filters!</p>
+                    ) : (
+                        filteredResources.map((resource) => (
+                            <div key={resource.id} className='rsrc-card'>
+                                <div className='rsrc-header'>
+                                    <h3>{resource.title}</h3>
+                                </div>
+                                <div className='rsrc-meta'>
+                                    <span id='post-by'>Posted by: {resource.postedBy || 'Anonymous'} </span>
+                                    <span id='post-time'>{formatRelativeTime(resource.createdAt)}</span>
+                                </div>
+                                <p>{resource.description}</p>
+                                {resource.location && <p><strong>Location:</strong> {resource.location}</p>}
+                                {resource.datesAvailable && <p><strong>Dates Available:</strong> {resource.datesAvailable}</p>}
+                                {resource.contact && <p><strong>Contact:</strong> {resource.contact}</p>}
+
+                                {resource.type && Array.isArray(resource.type) && resource.type.length > 0 && (
+                                    <div className="tag-list">
+                                        {resource.type.map((typeTag, index) => (
+                                            <span key={index} className="tag">{typeTag}</span>
+                                        ))}
                                     </div>
-                                    <button className="action-btn">📌 Save</button>
+                                )}
+
+                                <div className="resource-actions">
+                                    <div className="action-btns">
+                                        <div className='helpful-share'>
+                                            <button className="action-btn">👍 Helpful ({resource.helpfulCount || 0})</button>
+                                            <button className="action-btn">💬 Share ({resource.shareCount || 0})</button>
+                                        </div>
+                                        <button className="action-btn">📌 Save</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div> 
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
-            <Footer />
+            <Footer /> 
         </div>
     );
-}; 
+};
 
-export default ResourcePage;
+export default ResourcePage; 
+                        

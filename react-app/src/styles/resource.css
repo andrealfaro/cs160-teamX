@@ -59,7 +59,7 @@
     width: 100px;
 }
 
-.post-container { 
+.rsrc-post-container { 
     display: flex; 
     flex-direction: column; 
     padding-right: 100px;
@@ -70,7 +70,7 @@
     margin-bottom: 20px;
 }
 
-.post-form { 
+.rsrc-post-form { 
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     padding: 30px;
@@ -78,21 +78,21 @@
     background-color: #e9ecef;
 }
 
-.post-form h3 { 
+.rsrc-post-form h3 { 
     margin-top: 0;
 }
 
-.form-group { 
+.rsrc-form-group { 
     margin-bottom: 15px;
 }
 
-.form-group label { 
+.rsrc-form-group label { 
     display: block; 
     margin-bottom: 3px;
     font-weight: bold;
 }
 
-.form-group input, .form-group textarea, .form-group select {
+.rsrc-form-group input, .rsrc-form-group textarea, .rsrc-form-group select {
     width: 100%;
     padding: 5px;;
     border: 1px solid #ced4da;
@@ -100,17 +100,17 @@
     font-size: 1rem;
 }
 
-.form-group textarea { 
+.rsrc-form-group textarea { 
     min-height: 100px;
 }
 
-.form-actions { 
+.rsrc-form-actions { 
     display: flex;
     justify-content: flex-end;
     gap: 25px;
 }
 
-.filter-bar {
+.rsrc-filter-bar {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     padding: 20px;
@@ -118,30 +118,30 @@
     margin-bottom: 20px;
 }
 
-.filter-groups {
+.rsrc-filter-groups {
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 15px;
 }
 
-.filter-group {
+.rsrc-filter-group {
     flex: 1;
     min-width: 200px;
     padding: 15px;
 }
 
-.filter-group h4 {
+.rsrc-filter-group h4 {
     margin-top: 0px;
     margin-bottom: 15px;
 }
 
-.filter-options {
+.rsrc-filter-options {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
-.filter-tag {
+.rsrc-filter-tag {
     background: #e9ecef;
     padding: 0.25rem 0.75rem;
     border-radius: 16px;
@@ -150,11 +150,11 @@
     transition: all 0.2s ease;
 }
 
-.filter-tag:hover {
+.rsrc-filter-tag:hover {
     background: #dee2e6;
 }
 
-.filter-tag.active {
+.rsrc-filter-tag.active {
     background: #fa4c00;
     color: white;
 }

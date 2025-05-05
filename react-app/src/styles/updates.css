@@ -1,0 +1,190 @@
+.main-container { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.updates-content-container { 
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.title-section { 
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 100px;
+    padding-left: 100px;
+    width: 85%;
+}
+
+.update-refresh { 
+    display: flex;
+    gap: 15px;
+}
+
+.post-update { 
+    width: 200px;
+}
+
+.refresh-update { 
+    background-color: #e9ecef;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    transition: background 0.3s ease;
+    width: 150px;
+}
+
+.post-update, .submit-btn { 
+    display: inline-block;
+    background: #fa4c00;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    transition: background 0.3s ease;
+}
+
+.cancel-btn { 
+    background-color: white;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    transition: background 0.3s ease;
+    width: 100px;
+}
+
+.safety-update { 
+    background-color: #fa4c00;
+    color: white;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    transition: background 0.3s ease;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.upd-post-container { 
+    display: flex; 
+    flex-direction: column; 
+    padding-right: 100px;
+    padding-left: 100px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.upd-post-form { 
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 30px;
+    width: 70%;
+    background-color: #e9ecef;
+}
+
+.upd-post-form h3 { 
+    margin-top: 0;
+}
+
+.upd-form-group { 
+    margin-bottom: 15px;
+}
+
+.upd-form-group label { 
+    display: block; 
+    margin-bottom: 3px;
+    font-weight: bold;
+}
+
+.upd-form-group input, .upd-form-group textarea, .upd-form-group select {
+    width: 100%;
+    padding: 5px;;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.upd-form-group textarea { 
+    min-height: 100px;
+}
+
+.upd-form-actions { 
+    display: flex;
+    justify-content: flex-end;
+    gap: 25px;
+}
+
+.safety-note { 
+    margin-bottom: 15px;
+}
+
+.upd-filter-bar { 
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 70%;
+    margin-bottom: 20px;
+    display: flex; 
+    align-items: center;
+    gap: 15px;
+}
+
+.upd-filter-btn {
+    background: #e9ecef;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.upd-filter-btn:hover {
+    background: #dee2e6;
+}
+
+.upd-filter-btn.active {
+    background: #fa4c00;
+    color: white;
+}
+
+.updates-list { 
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.update-card { 
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+    width: 70%;
+    margin-bottom: 10px;
+}
