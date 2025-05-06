@@ -1,11 +1,23 @@
 import React from 'react'; 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/fire-logo.png'
 import '../styles/header.css';
 import { useAuth } from './AuthContext';
 
 function Header() { 
-    const { user, loginWithGoogle, loading } = useAuth();
+    const { user, loginWithGoogle, logout, loading } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try { 
+            await logout();
+            console.log('User logged out, navigating to home');
+            navigate('/home'); // redirect to the home page after logout
+        } catch (error) { 
+            console.error('Logout failed', error);
+        }
+    }
+
     return ( 
         <div className='header'>
             <div className='logo-container'>
@@ -48,7 +60,7 @@ function Header() {
             {!loading && user && (
                 <div className='signlog-container'>
                     <Link to='/user-profile'><h1 className='link'>Welcome, {user.name}</h1></Link>
-                    {/* <button className='login btn' onClick={logout}>Log Out</button> */}
+                    <button className='login btn' onClick={handleLogout}>Log Out</button>
                 </div>
             )}
           

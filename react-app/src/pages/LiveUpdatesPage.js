@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/updates.css'
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '../firebase'; 
 import { useAuth } from '../components/AuthContext.jsx';
 
@@ -106,6 +106,24 @@ function LiveUpdatesPage() {
         } catch (e) {
             console.error("Error adding document: ", e);
             alert("Failed to post update. Please try again.");
+        }
+    };
+
+    const handleVerifyClick = async (updateId) => {
+        if (!user) { 
+            console.log("User must be logged in to verify."); 
+            alert("Please log in to verify this resource.");
+            return;
+        }
+        try {
+            const updateRef = doc(db, 'updates', updateId);
+            await updateDoc(updateRef, {
+                helpfulCount: increment(1), // increment the helpful count
+            });
+            console.log("Resource verified successfully!");
+        } catch (error) {
+            console.error("Error verifying resource: ", error);
+            alert("There was an error verifying this resource. Please try again.");
         }
     };
 
@@ -310,7 +328,15 @@ function LiveUpdatesPage() {
                                 <div className="update-actions">
                                     <div className="action-btns">
                                         <div className='helpful-share'>
-                                            <button className="action-btn">✅ Verify ({update.helpfulCount || 0})</button>
+                                            <div className='verify-container'>
+                                                <button className="action-btn" 
+                                                    onClick={() => handleVerifyClick(update.id)}
+                                                    title={(!user) ? "Log in to verify this update." : "I verify that this information is correct and helpful."}
+                                                >✅ Verify ({update.helpfulCount || 0})</button>
+                                                <span className='upd-popup'>
+                                                    {(!user) ? "Log in to verify this resource." : "I verify that this information is correct and helpful."}
+                                                </span>
+                                            </div>
                                             <button className="action-btn">💬 Share</button>
                                         </div>
                                         <button className="action-btn">📌 Save</button>
