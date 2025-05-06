@@ -8,7 +8,6 @@ import CommunityPage from '../pages/CommunityPage';
 import AboutPage from '../pages/AboutPage';
 import UserProfilePage from '../pages/UserProfilePage';
 import LoginPage from '../pages/LoginPage';
-import SignupPage from '../pages/SignupPage';
 
 
 // page linking
@@ -25,7 +24,7 @@ function AppRoutes() {
                 <Route path='/about' element= {<AboutPage/>}/>
                 <Route path='/user-profile' element= {<UserProfilePage/>}/>
                 <Route path='/login' element= {<LoginPage/>}/>
-                <Route path='/signup' element= {<SignupPage/>}/>
+          
             </Routes>
         </Router> 
     );

@@ -8,12 +8,30 @@ import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase'; 
 
 function UserProfilePage() { 
-    const { user, loading } = useAuth();
+    const { user, loading, getUserProfilePicture } = useAuth();
 
+    const [location, setLocation] = useState('');
     const [updates, setUpdates] = useState([]); 
+    const [profilePicture, setProfilePicture] = useState([]);
     const [lastUpdatedDisplay, setLastUpdatedDisplay] = useState('Loading...');
 
-    console.log(user);
+    useEffect(() => {
+        if (!loading && user) {
+            const loadPicture = async () => {
+              try {
+                const pic = await getUserProfilePicture();
+                console.log(pic);
+                setProfilePicture(pic);
+                console.log(profilePicture);
+              } catch (error) {
+                console.error('Failed to fetch profile picture:', error);
+                setProfilePicture(null);
+              }
+            };
+      
+            loadPicture();
+          }
+        }, [loading, user, getUserProfilePicture]);
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -21,8 +39,7 @@ function UserProfilePage() {
                 const lat = currPos.coords.latitude; //47.35259539134266
                 const lon = currPos.coords.longitude; //-96.49255693382979
 
-                const apiKey = "a05610bc6dd9531e9c80d075e39ca6fc";
-                const url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+                const url = `https://api.weather.gov/points/${lat},${lon}`;
 
                 fetch (url)
                     .then((data) => {
@@ -30,8 +47,11 @@ function UserProfilePage() {
                 })
 
                 .then((json) => {
-                    console.log(json[0]);
-                    document.getElementById("location").textContent = json[0].name + ", " + json[0].state;         
+
+                    const city = json.properties.relativeLocation.properties.city;
+                    const state = json.properties.relativeLocation.properties.state;
+                    setLocation(`${city}, ${state}`);
+       
                 });
             });
         }
@@ -110,13 +130,6 @@ function UserProfilePage() {
         return () => unsubscribe();
     }, []); 
 
-    const filteredUpdates = updates.filter(update => {
-        if (update.postedBy === user.name) {
-            return true; 
-        }
-         return false;
-    });
-
     if (loading) {
         return <p>Loading profile...</p>;
     }
@@ -125,16 +138,29 @@ function UserProfilePage() {
         return <p>User not logged in.</p>;
     }
 
+    const filteredUpdates = updates.filter(update => {
+        if (update.postedBy === user.name) {
+            return true; 
+        }
+         return false;
+    });
+
+
+
     return (
         <div className='page-container'>
+       
             <Header/>
             <div className='main-container'>
-
-                <h1>User Profile</h1>
+                <div className='title-container'>
+                    <h1>User Profile</h1>
+                </div>
+                
                 <div className='user-container'>
                     <div className='user-profile-card'>
-                        <h2>{user.name}</h2>
-                        <p><span id='location'>Loading...</span></p>
+                        <img id='profile-picture' src={profilePicture } alt='User Profile' />
+                        <h1>{user.name}</h1>
+                        <p><span id='location'>{location || 'Loading...'}</span></p>
                         <p>{user.email}</p>
                     </div>
 
