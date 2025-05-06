@@ -1,7 +1,32 @@
+.main-container { 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.legal-content-container { 
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.title-section { 
+  display: flex; 
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 100px;
+  padding-left: 100px;
+  width: 85%;
+  margin-bottom: 20px;
+}
+
 .center-text {
     text-align: center;
-
-  }
+}
 
   .center-item {
     display: flex;
@@ -9,9 +34,9 @@
     align-items: center;
   }
 
-  .option-card-container {
-    margin-top: 50px;
-  }
+  /* .option-card-container {
+    margin-top: 20px;
+  } */
 
   .option-card { 
     display: flex; 
@@ -20,7 +45,7 @@
     border-radius: 8px;
     margin: 20px;
     padding: 25px;
-    width: auto;
+    width: 500px;
     height: 50px;
     text-align: center;
     justify-content: left;
@@ -160,8 +185,8 @@
 
   .back-btn {
     width: 100px;
-    background: #fa4c00;
-    color: white;
+    background: #e9ecef;
+    color: black;
     padding: 10px;
     border-radius: 4px;
     text-decoration: none;
@@ -170,11 +195,12 @@
     transition: background 0.3s ease;
     text-align: center;
     margin-bottom: 30px;
-    margin-left: 50px;
+    /* margin-left: 50px; */
 }
 
 .back-btn:hover {
-    background: #c03a00;
+    background: #dee2e6;
+    cursor: pointer;
 }
 
 .checkbox-label {
@@ -236,5 +262,5 @@
 }
 
 .employment-rights {
-margin: 40px;
+  margin: 40px;
 }

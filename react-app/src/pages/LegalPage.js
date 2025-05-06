@@ -22,23 +22,31 @@ function LegalPage() {
     };
   
     return (
-      <div>
+      <div className='main-container'>
         <Header />
-        <h1>Legal Rights Page</h1>
-        <h2 className='center-text'>Hello, What type of legal help are you looking for?</h2>
-        <div className='option-card-container'>
-          {options.map((option) => (
-            (selected === null || selected === option.title) && (
-                <div
-                key={option.title}
-                className="option-card"
-                onClick={() => handleClick(option)}
-              >
-                <div className="resource-icon">{option.icon}</div>
-                <h3>{option.title}</h3>
-              </div>
-            )
-          ))}
+        <div className='legal-content-container'>
+          <div className='title-section'>
+            <div className='legal-title'>
+              <h1>Legal Assistance</h1>
+              <p>Find the legal help you need.</p>
+              <p>Note: Seek professional legal help for more information or assistance.</p>
+            </div>
+          </div>
+          <h2 className='center-text'>What type of legal help are you looking for?</h2>
+          <div className='option-card-container'>
+            {options.map((option) => (
+              (selected === null || selected === option.title) && (
+                  <div
+                  key={option.title}
+                  className="option-card"
+                  onClick={() => handleClick(option)}
+                >
+                  <div className="resource-icon">{option.icon}</div>
+                  <h3>{option.title}</h3>
+                </div>
+              )
+            ))}
+          </div>
         </div>
         <Footer />
       </div>

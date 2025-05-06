@@ -123,9 +123,11 @@ function HousingPage() {
       };
 
     return (
-        <div>
+        <div className='main-container'>
             <Header/>
-            <h1>Housing & Eviction</h1>
+            <div className='title-section'>
+                <h1>Housing & Eviction</h1>
+            </div>
             <div className="center-text resource-icon">🏠</div>
             {step === 1 && (
                 <>

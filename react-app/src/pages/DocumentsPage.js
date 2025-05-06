@@ -65,9 +65,11 @@ function DocumentsPage() {
       };
 
     return (
-        <div>
+        <div className='main-container'>
             <Header/>
-            <h1>Lost Documents</h1>
+            <div className="title-section">
+              <h1>Lost Documents</h1>
+            </div>
             <div className="center-text resource-icon">📝</div>
             {step === 1 && (
                 <>

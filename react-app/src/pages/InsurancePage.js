@@ -63,9 +63,11 @@ function InsuranceHelp() {
       };
 
     return (
-        <div>
+        <div className='main-container'>
             <Header/>
-            <h1>Property Damage & Insurance</h1>
+            <div className='title-section'>
+                <h1>Property Damage & Insurance</h1> 
+            </div>   
             <div className="center-text resource-icon">📄</div>
             {step === 1 && (
                 <>

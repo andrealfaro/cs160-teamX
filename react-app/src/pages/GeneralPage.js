@@ -56,9 +56,11 @@ Direct to: Legal aid sign-up or hotline info
       };
 
     return (
-        <div>
+        <div className='main-container'>
             <Header/>
-            <h1>General Legal Help / Not Sure</h1>
+            <div className="title-section">
+                <h1>General Legal Help / Not Sure</h1>
+            </div>
             <div className="center-text resource-icon">⚖️</div>
             {step === 1 && (
                 <>
