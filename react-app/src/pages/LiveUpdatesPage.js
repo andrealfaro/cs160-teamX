@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/updates.css'
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment, setDoc, getDocs, where } from 'firebase/firestore';
 import { db } from '../firebase'; 
 import { useAuth } from '../components/AuthContext.jsx';
 
@@ -11,6 +11,7 @@ const formatRelativeTime = (date) => {
     if (!date) return 'Time N/A'; 
     const now = new Date();
     const diffInSeconds = Math.round((now.getTime() - date.getTime()) / 1000);
+    
 
     if (diffInSeconds < 60) {
         return 'just now';
@@ -47,6 +48,7 @@ function LiveUpdatesPage() {
     
     const [showForm, setShowForm] = useState(false);
     const toggleForm = () => setShowForm(!showForm);
+    const [savedPostIds, setSavedPostIds] = useState(new Set());
 
     const [activeFilter, setActiveFilter] = useState('All Updates');
     const [updates, setUpdates] = useState([]); 
@@ -127,6 +129,46 @@ function LiveUpdatesPage() {
         }
     };
 
+    const handleSave = async (post) => {
+        if (!user?.$id || !post?.id) {
+            console.error("Cannot save: missing user or post ID");
+            return;
+          }
+        try {
+            
+            const savedRef = doc(db, 'savedPosts', `${user.$id}_${post.id}`);
+            console.log(user.$id);
+            console.log(post.id);
+            await setDoc(savedRef, {
+              ...post,
+              savedBy: user.$id,
+              id: post.id,
+            });
+        
+            console.log('Post saved successfully');
+
+            setSavedPostIds(prev => new Set(prev).add(post.id));
+          } catch (err) {
+            console.error("Error saving post:", err);
+          }
+    };
+
+    useEffect(() => {   
+        if (!user?.$id) {
+            console.error("Cannot save: missing user ID");
+            return;
+          }
+        const getSavedPosts = async () => {
+            const q = query(
+                collection(db, 'savedPosts'),
+                where('savedBy', '==', user.$id)
+              );
+            const snapshot = await getDocs(q);
+            const savedIds = new Set(snapshot.docs.map(doc => doc.data().id)); // assuming you save `post.id`
+            setSavedPostIds(savedIds);
+        };
+        getSavedPosts();
+    }, [user]);
 
     useEffect(() => {
         // fetch documents from the 'updates' collection, ordered by by most recent 
@@ -339,7 +381,12 @@ function LiveUpdatesPage() {
                                             </div>
                                             <button className="action-btn">💬 Share</button>
                                         </div>
-                                        <button className="action-btn">📌 Save</button>
+                                        {savedPostIds.has(update.id) ? (
+                                            <button disabled className="action-btn">Saved!</button>
+                                            ) : (
+                                            <button className="action-btn" onClick={() => handleSave(update)}>📌 Save</button>
+                                            )}
+                                        {/* <button className="action-btn" onClick={() => handleSave(update)}>📌 Save</button> */}
                                     </div>
                                 </div>
                             </div>
