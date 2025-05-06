@@ -7,8 +7,6 @@ import LegalPage from '../pages/LegalPage';
 import CommunityPage from '../pages/CommunityPage';
 import AboutPage from '../pages/AboutPage';
 import UserProfilePage from '../pages/UserProfilePage';
-import LoginPage from '../pages/LoginPage';
-import SignupPage from '../pages/SignupPage';
 import InsurancePage from '../pages/InsurancePage';
 import HousingPage from '../pages/HousingPage';
 import EmploymentPage from '../pages/EmploymentPage';
@@ -30,8 +28,6 @@ function AppRoutes() {
                 <Route path='/community-contacts' element= {<CommunityPage/>}/>
                 <Route path='/about' element= {<AboutPage/>}/>
                 <Route path='/user-profile' element= {<UserProfilePage/>}/>
-                <Route path='/login' element= {<LoginPage/>}/>
-                <Route path='/signup' element= {<SignupPage/>}/>
                 <Route path='/insurance-help' element= {<InsurancePage/>}/>
                 <Route path='/housing-eviction' element= {<HousingPage/>}/>
                 <Route path='/employment-help' element= {<EmploymentPage/>}/>
