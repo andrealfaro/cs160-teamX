@@ -171,7 +171,7 @@
 .updates-list { 
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 75%;
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
@@ -186,7 +186,7 @@
     padding: 1rem;
     position: relative;
     overflow: hidden;
-    width: 70%;
+    width: 100%;
     margin-bottom: 10px;
 }
 
