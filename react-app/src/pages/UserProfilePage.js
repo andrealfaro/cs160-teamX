@@ -1,4 +1,6 @@
-import React from 'react'; 
+import React from 'react';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../firebase'; 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/userprofile.css';
@@ -59,14 +61,27 @@ function UserProfilePage() {
             });
         }
     }, []);
+    const checkSavedPosts = async () => {
+        if (!user?.$id) return;
+      
+        const q = query(
+          collection(db, "savedPosts"),
+          where("savedBy", "==", user.$id)
+        );
+      
+        const snapshot = await getDocs(q);
+        const results = snapshot.docs.map(doc => ({
+          docId: doc.id,
+          ...doc.data(),
+        }));
+      
+        console.log("Saved posts for user:", results);
+      };
 
 
-    // //if a user logs out while on UserProfilePage, they will be redirected to the HomePage
-    // useEffect(() => {
-    //     if (!loading && !user) {
-    //       navigate('/home');
-    //     }
-    //   }, [user, loading, navigate]);
+    if (!user) {
+        return <p>User not logged in.</p>;
+    }
     
     if (loading) return <p>Loading...</p>;
 
@@ -109,8 +124,8 @@ function UserProfilePage() {
                             }
                             {activeTab === 'saved' && (
                                 <div className='posts-container'>
-                                    <h3>Your Favorites</h3>
-                                    
+                                    <h3>Your Saved Posts</h3>
+                                    <UserUpdateCard filteredUpdatesId='saved'/>
                                 </div>
                             )}
                         </div>

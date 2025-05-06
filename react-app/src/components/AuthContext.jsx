@@ -50,17 +50,17 @@ export const AuthProvider = ({ children }) => {
       return profile.picture;
     };
   
-    // const logout = async () => {
-    //   try {
-    //     await account.deleteSession('current');
-    //     setUser(null);
-    //   } catch (err) {
-    //     console.error('Logout failed', err);
-    //   }
-    // };
+    const logout = async () => {
+      try {
+        await account.deleteSession('current');
+        setUser(null);
+      } catch (err) {
+        console.error('Logout failed', err);
+      }
+    };
   
     return (
-      <AuthContext.Provider value={{ user, loginWithGoogle, loading, getUserProfilePicture }}>
+      <AuthContext.Provider value={{ user, loginWithGoogle, logout, loading, getUserProfilePicture }}>
         {children}
       </AuthContext.Provider>
     );

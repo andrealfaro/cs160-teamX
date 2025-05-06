@@ -2,10 +2,10 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase'; 
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, setDoc, getDocs, where } from "firebase/firestore";
 import { useAuth } from './AuthContext';
 
-function UserUpdateCard(filteredUpdatesId) { 
+function UserUpdateCard({filteredUpdatesId}) { 
     const [updates, setUpdates] = useState([]);
     const { user } = useAuth();
     const [lastUpdatedDisplay, setLastUpdatedDisplay] = useState('Loading...');
@@ -54,8 +54,6 @@ function UserUpdateCard(filteredUpdatesId) {
         }
       };
 
-
-
     useEffect(() => {
         // fetch documents from the 'updates' collection, ordered by by most recent 
         const q = query(collection(db, 'updates'), orderBy('timestamp', 'desc'));
@@ -95,16 +93,34 @@ function UserUpdateCard(filteredUpdatesId) {
 
         return () => unsubscribe();
     }, []);
+
+    const fetchSavedPosts = async (userId) => {
+        const q = query(collection(db, "savedPosts"), where("savedBy", "==", userId));
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      };
     
-    useEffect(() => {
-        const filteredPublishedUpdates = updates.filter(update => {
-            if (update.postedBy === user?.name ) {
-                return true; 
-            }
-             return false;
-        });
-        setFilteredPublishedUpdates(filteredPublishedUpdates);
-      }, [updates, user]);
+      useEffect(() => {
+        if (!user) return;
+      
+        const updateFiltered = async () => {
+          if (filteredUpdatesId === 'saved') {
+            const saved = await fetchSavedPosts(user.$id);
+            console.log("miau saved:", saved);
+            const normalized = saved.map(post => ({
+                ...post,
+                createdAt: post.timestamp?.toDate ? post.timestamp.toDate() : new Date(post.timestamp)
+              }));
+            setFilteredPublishedUpdates(normalized);
+          } else {
+            const posted = updates.filter(update => update.postedBy === user.name);
+            setFilteredPublishedUpdates(posted);
+            console.log("miau posted:", posted);
+          }
+        };
+      
+        updateFiltered();
+      }, [filteredUpdatesId, user, updates]);
 
     return (
         <div className='post-card'>
@@ -136,8 +152,9 @@ function UserUpdateCard(filteredUpdatesId) {
                                     <button className="action-btn">💬 Share</button>
                                 </div>
                                 <div className='delete-save'>
-                                    <button className="action-btn">📌 Save</button>
-                                    <button className="action-btn" onClick={() => handleDelete(update.id)}>🗑️ Delete</button>
+                                    {filteredUpdatesId !== 'saved' && (
+                                        <button className="action-btn" onClick={() => handleDelete(update.id)}>🗑️ Delete</button>
+                                    )}
                                 </div>
                             </div>
                         </div>
