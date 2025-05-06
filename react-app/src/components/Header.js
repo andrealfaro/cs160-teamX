@@ -47,7 +47,7 @@ function Header() {
 
             {!loading && user && (
                 <div className='signlog-container'>
-                    <p id="welcome-message">Welcome, {user.name}</p>
+                    <Link to='/user-profile'><h1 className='link'>Welcome, {user.name}</h1></Link>
                     <button className='login btn' onClick={logout}>Log Out</button>
                 </div>
             )}

@@ -1,10 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { account } from '../appwrite';
+import { account, functions } from '../appwrite';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+
     const [loading, setLoading] = useState(true);
   
     useEffect(() => {
@@ -12,8 +13,10 @@ export const AuthProvider = ({ children }) => {
         try {
           const loggedInUser = await account.get();
           setUser(loggedInUser);
+
         } catch (err) {
           setUser(null);
+
         } finally {
           setLoading(false);
         }
