@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/resource.css'
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../components/AuthContext.jsx';
 
@@ -137,7 +137,24 @@ function ResourcePage() {
         }
     };
 
-
+    const handleVerifyClick = async (resourceId) => {
+        if (!user) { 
+            console.log("User must be logged in to verify."); 
+            alert("Please log in to verify this resource.");
+            return;
+        }
+        try {
+            const resourceRef = doc(db, 'resources', resourceId);
+            await updateDoc(resourceRef, {
+                helpfulCount: increment(1), // increment the helpful count
+            });
+            console.log("Resource verified successfully!");
+        } catch (error) {
+            console.error("Error verifying resource: ", error);
+            alert("There was an error verifying this resource. Please try again.");
+        }
+    };
+        
     // filter resources based on type tags
     const filteredResources = resources.filter(resource => {
         // filter by type
@@ -334,7 +351,6 @@ function ResourcePage() {
                 )}
 
                 <div className="rsrc-filter-bar">
-                    <button className='clear-filters-btn' onClick={clearFiltersFunc}> Clear Filters </button>
                     <div className="rsrc-filter-groups">
                          {[
                          { group: 'resource-type', title: 'Resource Type', options: ['All','Food','Water','Medical','Shelter','Clothing','Financial','Cleanup','Supplies','Transportation'] },
@@ -361,6 +377,7 @@ function ResourcePage() {
                         {/* TODO: Implement search functionality */}
                         <input type="text" value={searchInput} placeholder="Search resources..." onChange={(x) => setSearchInput(x.target.value)}/>
                         <button className="search-btn" onClick={doNogginSearch}>Search</button>
+                        <button className='clear-filters-btn' onClick={clearFiltersFunc}> Clear Filters </button>
                     </div>
                 </div>
 
@@ -393,7 +410,7 @@ function ResourcePage() {
                                 <div className="resource-actions">
                                     <div className="action-btns">
                                         <div className='helpful-share'>
-                                            <button className="action-btn">✅ Verify ({resource.helpfulCount || 0})</button>
+                                            <button className="action-btn" onClick={() => handleVerifyClick(resource.id)}>✅ Verify ({resource.helpfulCount || 0})</button>
                                             <button className="action-btn">💬 Share</button>
                                         </div>
                                         <button className="action-btn">📌 Save</button>

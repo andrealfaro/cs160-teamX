@@ -34,14 +34,23 @@
 }
 
 .clear-filters-btn {
-    width: 100px;
+    width: 125px;
+    background-color: #e9ecef;
+    color: black;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    transition: background 0.3s ease;
 }
 
 .search-btn { 
     width: 100px;
 }
 
-.post-rsrc, .submit-btn, .search-btn, .clear-filters-btn{ 
+.post-rsrc, .submit-btn, .search-btn{ 
     display: inline-block;
     background: #fa4c00;
     color: white;
