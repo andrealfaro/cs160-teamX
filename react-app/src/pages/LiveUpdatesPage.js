@@ -328,7 +328,15 @@ function LiveUpdatesPage() {
                                 <div className="update-actions">
                                     <div className="action-btns">
                                         <div className='helpful-share'>
-                                            <button className="action-btn" onClick={() => handleVerifyClick(update.id)}>✅ Verify ({update.helpfulCount || 0})</button>
+                                            <div className='verify-container'>
+                                                <button className="action-btn" 
+                                                    onClick={() => handleVerifyClick(update.id)}
+                                                    title={(!user) ? "Log in to verify this update." : "I verify that this information is correct and helpful."}
+                                                >✅ Verify ({update.helpfulCount || 0})</button>
+                                                <span className='upd-popup'>
+                                                    {(!user) ? "Log in to verify this resource." : "I verify that this information is correct and helpful."}
+                                                </span>
+                                            </div>
                                             <button className="action-btn">💬 Share</button>
                                         </div>
                                         <button className="action-btn">📌 Save</button>

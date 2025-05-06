@@ -410,7 +410,15 @@ function ResourcePage() {
                                 <div className="resource-actions">
                                     <div className="action-btns">
                                         <div className='helpful-share'>
-                                            <button className="action-btn" onClick={() => handleVerifyClick(resource.id)}>✅ Verify ({resource.helpfulCount || 0})</button>
+                                            <div className='verify-container'>
+                                                <button className="action-btn" 
+                                                    onClick={() => handleVerifyClick(resource.id)}
+                                                    title={(!user) ? "Log in to verify this resource." : "I verify that this information is correct and helpful."}
+                                                >✅ Verify ({resource.helpfulCount || 0})</button>
+                                                <span className='rsrc-popup'>
+                                                    {(!user) ? "Log in to verify this resource." : "I verify that this information is correct and helpful."}
+                                                </span>
+                                            </div>
                                             <button className="action-btn">💬 Share</button>
                                         </div>
                                         <button className="action-btn">📌 Save</button>
