@@ -5,7 +5,7 @@ import '../styles/header.css';
 import { useAuth } from './AuthContext';
 
 function Header() { 
-    const { user, loginWithGoogle, logout, loading } = useAuth();
+    const { user, loginWithGoogle, loading } = useAuth();
     return ( 
         <div className='header'>
             <div className='logo-container'>
@@ -48,7 +48,7 @@ function Header() {
             {!loading && user && (
                 <div className='signlog-container'>
                     <Link to='/user-profile'><h1 className='link'>Welcome, {user.name}</h1></Link>
-                    <button className='login btn' onClick={logout}>Log Out</button>
+                    {/* <button className='login btn' onClick={logout}>Log Out</button> */}
                 </div>
             )}
           

@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserUpdateCard from '../components/UserUpdateCard';
 function UserProfilePage() { 
-    const navigate = useNavigate();
     const { user, loading, getUserProfilePicture } = useAuth();
 
     const [activeTab, setActiveTab] = useState('posts');
@@ -62,16 +61,14 @@ function UserProfilePage() {
     }, []);
 
 
-    //if a user logs out while on UserProfilePage, they will be redirected to the HomePage
-    useEffect(() => {
-        if (!loading && !user) {
-          navigate('/home');
-        }
-      }, [user, loading, navigate]);
+    // //if a user logs out while on UserProfilePage, they will be redirected to the HomePage
+    // useEffect(() => {
+    //     if (!loading && !user) {
+    //       navigate('/home');
+    //     }
+    //   }, [user, loading, navigate]);
     
     if (loading) return <p>Loading...</p>;
-
-
 
     return (
         <div className='page-container'>
