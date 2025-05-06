@@ -1,20 +1,33 @@
+
 .page-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
+  } 
 
 .main-container { 
     flex: 1;
+}
+
+.title-container {
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 100px;
+    padding-left: 100px;
+    width: 85%;
+    margin-bottom: 20px;
 }
 
 .user-container {
     width: 100%;
     display: flex;
     flex-direction: row;
+
 }
 .user-profile-card { 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 15px rgba(0,0,0,0.1);
     border-radius: 8px;
     margin: 20px;
     padding-left: 50px;
@@ -27,7 +40,17 @@
 
 .post-container {
     padding: 10px;
-   
+
     width: 70%;
 }
 
+.update-card {
+    width: 90%;
+   
+}
+
+#profile-picture {
+    width: 200px;
+    height: 200px;
+    border-radius: 10%;
+}

@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
           const loggedInUser = await account.get();
           setUser(loggedInUser);
 
-        } catch (err) {
+        } catch (error) {
           setUser(null);
 
         } finally {
@@ -36,6 +36,19 @@ export const AuthProvider = ({ children }) => {
         console.error('Login failed', err);
       }
     };
+
+    const getUserProfilePicture = async () => {
+      const session = await account.getSession('current');
+      const accessToken = session.providerAccessToken;
+
+      const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      const profile = await res.json();
+      return profile.picture;
+    };
   
     const logout = async () => {
       try {
@@ -47,7 +60,7 @@ export const AuthProvider = ({ children }) => {
     };
   
     return (
-      <AuthContext.Provider value={{ user, loginWithGoogle, logout, loading }}>
+      <AuthContext.Provider value={{ user, loginWithGoogle, logout, loading, getUserProfilePicture }}>
         {children}
       </AuthContext.Provider>
     );
