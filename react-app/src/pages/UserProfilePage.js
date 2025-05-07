@@ -7,6 +7,7 @@ import '../styles/userprofile.css';
 import { useAuth } from '../components/AuthContext.jsx';
 import { useEffect, useState } from 'react';
 import ResourceCard from '../components/ResourceCard';
+import UserResourceCard from '../components/UserResourceCard';
 
 import UserUpdateCard from '../components/UserUpdateCard';
 function UserProfilePage() { 
@@ -105,6 +106,7 @@ function UserProfilePage() {
                                     <div className='posts-container'>
                                         <h3>Your Published Posts</h3>
                                         <UserUpdateCard />
+                                        <UserResourceCard />
                                     </div>
                                 )
                             }

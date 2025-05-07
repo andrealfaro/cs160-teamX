@@ -40,9 +40,9 @@ function Header() {
                 <li>
                     <Link to='/community-contacts'><h1 className='link'>Community</h1></Link>
                 </li>
-                <li>
+                {/* <li>
                     <Link to='/about'><h1 className='link'>About</h1></Link>
-                </li>
+                </li> */}
             </ul>
             {/* <div className='language-container'>
                 <select className='language' id='language'>
