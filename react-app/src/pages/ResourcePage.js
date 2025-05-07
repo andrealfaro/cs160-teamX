@@ -5,6 +5,7 @@ import '../styles/resource.css'
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment, setDoc, getDocs, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../components/AuthContext.jsx';
+import { getFID } from 'web-vitals';
 
 const formatRelativeTime = (date) => {
     if (!date) return 'Time N/A'; 
@@ -115,6 +116,28 @@ function ResourcePage() {
         }
 
         try {
+            const response = await fetch(
+                'https://noggin.rea.gent/faint-thrush-3181',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer rg_v1_l0pbdzvtipiv577if5d78ag6swaw2yj27tr3_ngk',
+                    },
+                body: JSON.stringify({
+                    // fill variables here.
+                    "date1": resourceDates,
+                    "date2": new Date().toLocaleDateString()
+                }),
+            }
+            );
+
+            const res = await response.text();
+            let tmp = false;
+            if (res == 'true') {
+                tmp = true;
+            }
+
             await addDoc(collection(db, "resources"), {
                 title: resourceTitle,
                 description: resourceDescription,
@@ -128,7 +151,8 @@ function ResourcePage() {
                 helpfulCount: 0,
                 shareCount: 0,
                 savedBy: [],
-                verified: false
+                verified: false,
+                expired: tmp
             });
 
             console.log("Resource successfully posted!");
@@ -158,7 +182,27 @@ function ResourcePage() {
             alert("There was an error verifying this resource. Please try again.");
         }
     };
-        
+
+    const checkDate = async(resource) => {
+        const response = await fetch(
+            'https://noggin.rea.gent/supposed-catfish-9700',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer rg_v1_nix5u2arh0u5jza8933wfzf3ec7gtlnzob3e_ngk',
+                },
+                body: JSON.stringify({
+                    // fill variables here.
+                    "date": resource.datesAvailable,
+                    "currDate": new Date().toLocaleTimeString()
+                }),
+            }
+        );
+
+        return response.text();
+    }
+
     // filter resources based on type tags
     const filteredResources = resources.filter(resource => {
         // filter by type
@@ -185,9 +229,17 @@ function ResourcePage() {
              return false;
         }
 
+        //console.log(resource);
+        if (statusFilter !== 'All' && (statusFilter == 'Active' && resource.expired)) {
+             return false;
+        }
+
+        
         // all filters passed
         return true;
     });
+
+    
 
     const doNogginSearch = async() => {
         setSearchSpinner(true);
@@ -441,7 +493,7 @@ function ResourcePage() {
                          {[
                          { group: 'resource-type', title: 'Resource Type', options: ['All','Food','Water','Medical','Shelter','Clothing','Financial','Cleanup','Supplies','Transportation'] },
                          { group: 'location', title: 'Location (within 5 miles)', options: []},
-                         { group: 'status', title: 'Status', options: ['All','Verified','Urgent','Active'] }
+                         { group: 'status', title: 'Status', options: ['All','Verified','Active'] }
                          ].map(({ group, title, options }) => (
                          <div key={group} className={`rsrc-filter-group ${group}`}>
                              <h4>{title}</h4>
