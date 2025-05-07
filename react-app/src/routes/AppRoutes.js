@@ -26,7 +26,7 @@ function AppRoutes() {
                 <Route path='/live-updates' element= {<LiveUpdatesPage/>}/>
                 <Route path='/legal-rights' element= {<LegalPage/>}/>
                 <Route path='/community-contacts' element= {<CommunityPage/>}/>
-                <Route path='/about' element= {<AboutPage/>}/>
+                {/* <Route path='/about' element= {<AboutPage/>}/> */}
                 <Route path='/user-profile' element= {<UserProfilePage/>}/>
                 <Route path='/insurance-help' element= {<InsurancePage/>}/>
                 <Route path='/housing-eviction' element= {<HousingPage/>}/>

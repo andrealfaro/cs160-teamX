@@ -9,6 +9,9 @@ function ResourceCard() {
     const [finalResultsToShow, setFinalResultsToShow] = useState([]);
     const { user } = useAuth();
 
+    const [filteredPublishedUpdates, setFilteredPublishedUpdates] = useState([]);
+    
+
     const formatRelativeTime = (date) => {
         if (!date) return 'Time N/A'; 
     
@@ -51,8 +54,7 @@ function ResourceCard() {
     
             console.log("Saved resources:", normalized);
             setFinalResultsToShow(normalized);
-            console.log("Saved resources:", normalized);
-          
+            console.log("Saved resources:", normalized);  
           } catch (error) {
             console.error("Error fetching saved resources:", error);
           return [];
