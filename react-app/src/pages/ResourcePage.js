@@ -571,7 +571,7 @@ function ResourcePage() {
                                                             : "I verify this information is correct and helpful."
                                                     }
                                                 >✅ Verify ({resource.helpfulCount || 0})</button>
-                                                <span className='rsrc-popup'>
+                                                <span className='rsrc-popup popup-verify'>
                                                     {(!user) 
                                                         ? "Log in to verify this resource." 
                                                         : (resource.verifiedByUsers && resource.verifiedByUsers.includes(user.$id))
@@ -580,13 +580,25 @@ function ResourcePage() {
                                                     }
                                                 </span>
                                             </div>
-                                            <button className="action-btn">💬 Share</button>
+                                            {/* <button className="action-btn">💬 Share</button> */}
                                         </div>
                                         {savedResourcesIds.has(resource.id) ? (
                                             <button disabled className="action-btn">Saved!</button>
                                             ) : (
-                                            <button className="action-btn" onClick={() => handleSaveResource(resource)}>📌 Save</button>
-                                            )}
+                                            <div className='verify-container'>
+                                                <button className="action-btn" 
+                                                    onClick={() => handleSaveResource(resource)}
+                                                    title={(!user) 
+                                                        ? "Log in to verify this resource." : "Save this resource for later."
+                                                    }
+                                                >📌 Save</button>
+                                                <span className='rsrc-popup popup-save'>
+                                                    {(!user) 
+                                                        ? "Log in to save this resource." : "Save this resource for later"
+                                                    }
+                                                </span>
+                                            </div>
+                                        )}
                                         {/* <button className="action-btn" onClick={() => handleSaveResource(resource)}>📌 Save</button> */}
                                     </div>
                                 </div>

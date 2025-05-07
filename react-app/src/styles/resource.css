@@ -273,7 +273,6 @@
 }
 
 .rsrc-card {
-
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     padding: 1rem;
@@ -337,6 +336,14 @@
     display: inline-block; 
 }
 
+.popup-save { 
+    margin-left: -70px;
+}
+
+.popup-verify { 
+    margin-left: -50px;
+}
+
 .verify-container .rsrc-popup { 
     visibility: hidden; 
     width: 100px;
@@ -351,7 +358,7 @@
     z-index: 1;
     bottom: 125%;
     left: 50%;
-    margin-left: -50px;
+    /* margin-left: -50px; */
 
     opacity: 0;
     transition: opacity 0.3s;

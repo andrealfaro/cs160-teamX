@@ -390,7 +390,7 @@ function LiveUpdatesPage() {
                                                             : "I verify this information is correct and helpful."
                                                     }
                                                 >✅ Verify ({update.helpfulCount || 0})</button>
-                                                <span className='upd-popup'>
+                                                <span className='upd-popup popup-verify'>
                                                     {(!user) 
                                                         ? "Log in to verify this update." 
                                                         : (update.verifiedByUsers && update.verifiedByUsers.includes(user.$id))
@@ -398,12 +398,24 @@ function LiveUpdatesPage() {
                                                             : "I verify this information is correct and helpful."
                                                     }                                                </span>
                                             </div>
-                                            <button className="action-btn">💬 Share</button>
+                                            {/* <button className="action-btn">💬 Share</button> */}
                                         </div>
                                         {savedPostIds.has(update.id) ? (
                                             <button disabled className="action-btn">Saved!</button>
                                             ) : (
-                                            <button className="action-btn" onClick={() => handleSave(update)}>📌 Save</button>
+                                                <div className='verify-container'>
+                                                    <button className="action-btn" 
+                                                        onClick={() => handleSave(update)}
+                                                        title={(!user) 
+                                                            ? "Log in to verify this update." : "Save this update for later."
+                                                        }
+                                                    >📌 Save</button>
+                                                    <span className='upd-popup popup-save'>
+                                                        {(!user) 
+                                                            ? "Log in to save this update." : "Save this update for later"
+                                                        }
+                                                    </span>
+                                                </div>                                            
                                             )}
                                         {/* <button className="action-btn" onClick={() => handleSave(update)}>📌 Save</button> */}
                                     </div>

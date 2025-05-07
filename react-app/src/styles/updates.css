@@ -219,6 +219,14 @@
     display: inline-block; 
 }
 
+.popup-save { 
+    margin-left: -70px;
+}
+
+.popup-verify { 
+    margin-left: -50px;
+}
+
 .verify-container .upd-popup { 
     visibility: hidden; 
     width: 100px;
@@ -233,7 +241,7 @@
     z-index: 1;
     bottom: 125%;
     left: 50%;
-    margin-left: -50px;
+    /* margin-left: -50px; */
 
     opacity: 0;
     transition: opacity 0.3s;
