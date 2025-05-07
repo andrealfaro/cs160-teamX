@@ -42,6 +42,7 @@ function ResourcePage() {
     const [searchInput, setSearchInput] = useState('');
     const [nogginFilerRes, setNogginFilterRes] = useState(false);
     const [searchSpinner, setSearchSpinner] = useState(false);
+    const [locInput, setLocInput] = useState('');
 
     const [activeFilters, setActiveFilters] = useState({
         'resource-type': 'All',
@@ -231,6 +232,48 @@ function ResourcePage() {
             return true;
         })};
 
+    const doLocSearch = async() => {
+        if (!locInput) {
+            alert("Please enter a location.");
+            return;
+        }
+
+        setSearchSpinner(true);
+        const allResourceInfo = resources.map((r, i) => `${i}. Location: ${r.location}`).join('\n');
+
+        // import fetch from 'node-fetch'; // for node.js
+
+        const response = await fetch(
+            'https://noggin.rea.gent/hidden-snake-4976',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer rg_v1_sel28t9vkg4rrt9gtm6cttxg4p3yn5kzxfsa_ngk',
+                },
+                body: JSON.stringify({
+                    // fill variables here.
+                    "var1": allResourceInfo,
+                    "var2": locInput,
+                }),
+            }
+        );
+
+        const text = await response.text();
+        if (text.includes('-1')) {
+            alert("No matches for the inputted location!");
+            setLocInput("");
+            setSearchSpinner(false);
+            return;
+        }
+        const indices = text.match(/\d+/g).map(Number);
+        
+
+        const nogginResultsBools = indices.map(i => resources[i]).filter(Boolean);
+        setNogginFilterRes(nogginResultsBools);
+        setSearchSpinner(false);
+    }
+
     const finalResultsToShow = nogginFilerRes.length > 0 ? filterLogic(nogginFilerRes) : filterLogic(filteredResources);
 
     const clearFiltersFunc = () => {
@@ -240,6 +283,7 @@ function ResourcePage() {
             'status': 'All' 
         });
         setSearchInput('');
+        setLocInput('');
         setNogginFilterRes([]);
     };
 
@@ -357,7 +401,7 @@ function ResourcePage() {
                     <div className="rsrc-filter-groups">
                          {[
                          { group: 'resource-type', title: 'Resource Type', options: ['All','Food','Water','Medical','Shelter','Clothing','Financial','Cleanup','Supplies','Transportation'] },
-                         { group: 'location', title: 'Location', options: ['All Areas','North County','Downtown','East Side','South Hills','West Valley'] },
+                         { group: 'location', title: 'Location (within 5 miles)', options: []},
                          { group: 'status', title: 'Status', options: ['All','Verified','Urgent','Active'] }
                          ].map(({ group, title, options }) => (
                          <div key={group} className={`rsrc-filter-group ${group}`}>
@@ -372,6 +416,8 @@ function ResourcePage() {
                                      {opt}
                                  </span>
                              ))}
+                             {group === 'location' && (<div className='loc-bar'> <input type='text' placeholder='City or zip code' value={locInput} onChange={(x) => setLocInput(x.target.value)}/>
+                             <button className='go-btn' onClick={doLocSearch}>Go</button> </div>)}
                              </div>
                          </div>
                             ))}
