@@ -4,6 +4,7 @@ import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase'; 
 import { doc, deleteDoc, setDoc, getDocs, where } from "firebase/firestore";
 import { useAuth } from './AuthContext';
+import '../styles/userprofile.css';
 
 function UserResourceCard({filteredResourceId}) { 
     const [resources, setResources] = useState([]);
@@ -47,7 +48,7 @@ function UserResourceCard({filteredResourceId}) {
 
     const handleDelete = async (postId) => {
         try {
-          await deleteDoc(doc(db, 'updates', postId));
+          await deleteDoc(doc(db, 'resources', postId));
           console.log('Post deleted successfully');
         } catch (err) {
           console.error("Error deleting post:", err);
@@ -125,7 +126,7 @@ function UserResourceCard({filteredResourceId}) {
     return (
         <div className='post-card'>
             {filteredPublishedResources.length === 0 ? (
-                <p>No posts found under your account. Try posting one in the Resources Page!</p>
+                <p>No published resources found under your account. Try posting one in the Resources Page!</p>
             ) : (
                 filteredPublishedResources.map(resource => (
                     <div key={resource.id} className='rsrc-card'>
@@ -162,6 +163,11 @@ function UserResourceCard({filteredResourceId}) {
                                         </span>
                                     </div>
                                     {/* <button className="action-btn">💬 Share</button> */}
+                                
+                                   
+                                </div>
+                                <div className='delete-save'>
+                                    <button className="action-btn" onClick={() => handleDelete(resource.id)}>🗑️ Delete</button>
                                 </div>
                                 {/* <button disabled className="action-btn">📌 Saved!</button> */}
                             </div>

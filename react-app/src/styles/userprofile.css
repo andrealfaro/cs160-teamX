@@ -61,11 +61,17 @@
     height: 200px;
     border-radius: 10%;
 }
+.action-btns {
+    width: 100%;
+    display: flex;
+    float: right;
+}
 
 .delete-save { 
     display: flex; 
     flex-direction: row;
     gap: 10px;
+    float: right;
 }
 
 .tabs-navbar {

@@ -104,7 +104,7 @@ function UserProfilePage() {
                         <div className='tab-content'>
                             {activeTab === 'posts' && (
                                     <div className='posts-container'>
-                                        <h3>Your Published Posts</h3>
+                                        <h3>Your Published Posts/Resources</h3>
                                         <UserUpdateCard />
                                         <UserResourceCard />
                                     </div>

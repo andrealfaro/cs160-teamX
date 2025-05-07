@@ -1,7 +1,7 @@
 import React from 'react'; 
 
 import { useState, useEffect } from 'react';
-import { query, collection, where, getDocs, doc, setDoc } from 'firebase/firestore';
+import { query, collection, where, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../components/AuthContext';
 
@@ -65,6 +65,19 @@ function ResourceCard() {
         getSavedResources();
     }, []);
 
+    const handleDeleteFromSaved = async (postId) => {
+        const docId = `${user.$id}_${postId}`;
+        try {
+          await deleteDoc(doc(db, 'savedResources', docId));
+          console.log('Post deleted successfully');
+
+          const updatedResources = finalResultsToShow.filter(resource => resource.id !== postId);
+          setFinalResultsToShow(updatedResources);
+        } catch (err) {
+          console.error("Error deleting post:", err);
+        }
+      };
+
     return (
         <div className='rsrc-posts'>
         {finalResultsToShow.length === 0 ? (
@@ -106,7 +119,7 @@ function ResourceCard() {
                                 </div>
                                 {/* <button className="action-btn">💬 Share</button> */}
                             </div>
-                            {/* <button disabled className="action-btn">📌 Saved!</button> */}
+                            <button className="action-btn" onClick={() => handleDeleteFromSaved(resource.id)}>📌 Remove from Saved</button>
                         </div>
                     </div>
                 </div>

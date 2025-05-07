@@ -370,7 +370,7 @@ function ResourcePage() {
             });
         
             console.log('Post saved successfully');
-            setSavedResourcesIds(prev => new Set(prev).add(resource.id));
+             setSavedResourcesIds(prev => new Set(prev).add(resource.id));
             console.log("savedResourcesIds miau", savedResourcesIds);
         } catch (error) {
             console.error("Error saving resource: ", error);

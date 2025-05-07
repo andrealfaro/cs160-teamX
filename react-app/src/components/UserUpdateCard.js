@@ -94,6 +94,19 @@ function UserUpdateCard({filteredUpdatesId}) {
         return () => unsubscribe();
     }, []);
 
+    const handleDeleteFromSaved = async (postId) => {
+        const docId = `${user.$id}_${postId}`;
+        try {
+          await deleteDoc(doc(db, 'savedPosts', docId));
+          console.log('Post deleted successfully');
+
+          const updatedResources = filteredPublishedUpdates.filter(resource => resource.id !== postId);
+          setFilteredPublishedUpdates(updatedResources);
+        } catch (err) {
+          console.error("Error deleting post:", err);
+        }
+      };
+
     const fetchSavedPosts = async (userId) => {
         const q = query(collection(db, "savedPosts"), where("savedBy", "==", userId));
         const snapshot = await getDocs(q);
@@ -149,11 +162,13 @@ function UserUpdateCard({filteredUpdatesId}) {
                             <div className="action-btns">
                                 <div className='helpful-share'>
                                     {/* /* <button className="action-btn">✅ Verify ({update.helpfulCount || 0})</button> */}
-                                    {/* <button className="action-btn">Remove from Saved</button>  */}
+                                    
                                 </div>
                                 <div className='delete-save'>
-                                    {filteredUpdatesId !== 'saved' && (
+                                    {filteredUpdatesId !== 'saved' ? (
                                         <button className="action-btn" onClick={() => handleDelete(update.id)}>🗑️ Delete</button>
+                                    ) : (
+                                        <button className="action-btn" onClick={() => handleDeleteFromSaved(update.id)}>📌 Remove from Saved</button>
                                     )}
                                 </div>
                             </div>
