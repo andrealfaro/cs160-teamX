@@ -106,7 +106,7 @@ function HomePage() {
                             <p className='advice'><strong>Health Advice:</strong> {airState ? airState.advice: 'Loading...'} </p>
                             <p className='updated'><small>Updated: Today, {airState ? airState.updated: 'Loading...'} </small></p>
                         </div>
-                        <div className='condition-card' id='water'>
+                        {/* <div className='condition-card' id='water'>
                             <h3>
                                 <span className="status-indicator status-moderate"></span>
                                 Water Quality
@@ -114,7 +114,7 @@ function HomePage() {
                             <p className='status'><strong>Status:</strong> Advisory in effect</p>
                             <p className='advice'><strong>Health Advice:</strong> Boil water before drinking in affected areas.</p>
                             <p className='updated'><small>Updated: Today, 07:30 AM</small></p>
-                        </div>
+                        </div> */}
                         <div className='condition-card' id='fire'>
                             <h3>
                                 <span className="status-indicator status-poor"></span>

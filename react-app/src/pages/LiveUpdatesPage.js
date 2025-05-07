@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/updates.css'
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment, setDoc, getDocs, where } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment, setDoc, getDocs, where, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase'; 
 import { useAuth } from '../components/AuthContext.jsx';
 
@@ -114,13 +114,22 @@ function LiveUpdatesPage() {
     const handleVerifyClick = async (updateId) => {
         if (!user) { 
             console.log("User must be logged in to verify."); 
-            alert("Please log in to verify this resource.");
+            alert("Please log in to verify this update.");
             return;
         }
+
+        const updateToVerify = updates.find(update => update.id === updateId);
+        if (updateToVerify?.verifiedByUsers.includes(user.$id)) {
+            console.log("User has already verified this update.");
+            alert("You have already verified this update.");
+            return;
+        }
+
         try {
             const updateRef = doc(db, 'updates', updateId);
             await updateDoc(updateRef, {
                 helpfulCount: increment(1), // increment the helpful count
+                verifiedByUsers: arrayUnion(user.$id), 
             });
             console.log("Resource verified successfully!");
         } catch (error) {
@@ -185,6 +194,7 @@ function LiveUpdatesPage() {
                         id: doc.id,
                         ...data,
                         createdAt: createdAtDate, 
+                        verifiedByUsers: Array.isArray(data.verifiedByUsers) ? data.verifiedByUsers : [],
                     });
                  } else {
                      console.warn(`Document ${doc.id} is missing a valid timestamp or was pending.`);
@@ -373,11 +383,20 @@ function LiveUpdatesPage() {
                                             <div className='verify-container'>
                                                 <button className="action-btn" 
                                                     onClick={() => handleVerifyClick(update.id)}
-                                                    title={(!user) ? "Log in to verify this update." : "I verify that this information is correct and helpful."}
+                                                    title={(!user) 
+                                                        ? "Log in to verify this update." 
+                                                        : (update.verifiedByUsers && update.verifiedByUsers.includes(user.$id))
+                                                            ? "You have already verified this update."
+                                                            : "I verify this information is correct and helpful."
+                                                    }
                                                 >✅ Verify ({update.helpfulCount || 0})</button>
                                                 <span className='upd-popup'>
-                                                    {(!user) ? "Log in to verify this resource." : "I verify that this information is correct and helpful."}
-                                                </span>
+                                                    {(!user) 
+                                                        ? "Log in to verify this update." 
+                                                        : (update.verifiedByUsers && update.verifiedByUsers.includes(user.$id))
+                                                            ? "You have already verified this update."
+                                                            : "I verify this information is correct and helpful."
+                                                    }                                                </span>
                                             </div>
                                             <button className="action-btn">💬 Share</button>
                                         </div>

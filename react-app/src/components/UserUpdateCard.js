@@ -138,7 +138,7 @@ function UserUpdateCard({filteredUpdatesId}) {
     return (
         <div className='post-card'>
             {filteredPublishedUpdates.length === 0 ? (
-                <p>No posts found under your account. Try posting one in the Live Community Updates Page!</p>
+                <p>No published updates found under your account. Try posting one in the Live Updates Page!</p>
             ) : (
                 filteredPublishedUpdates.map(update => (
                     <div className='update-card' key={update.id}> 

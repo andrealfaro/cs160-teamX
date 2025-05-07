@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/resource.css'
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment, setDoc, getDocs, where } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment, setDoc, getDocs, where, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../components/AuthContext.jsx';
 import { getFID } from 'web-vitals';
@@ -91,6 +91,7 @@ function ResourcePage() {
                        id: doc.id,
                        ...data,
                        createdAt: createdAtDate,
+                       verifiedByUsers: Array.isArray(data.verifiedByUsers) ? data.verifiedByUsers : [],
                    });
                 } else {
                     console.warn(`Resource document ${doc.id} is missing a valid timestamp or was pending.`);
@@ -171,10 +172,19 @@ function ResourcePage() {
             alert("Please log in to verify this resource.");
             return;
         }
+
+        const resourceToVerify = resources.find(resource => resource.id === resourceId);
+        if (resourceToVerify?.verifiedByUsers.includes(user.$id)) {
+            console.log("User has already verified this resource.");
+            alert("You have already verified this resource.");
+            return;
+        }
+
         try {
             const resourceRef = doc(db, 'resources', resourceId);
             await updateDoc(resourceRef, {
                 helpfulCount: increment(1), // increment the helpful count
+                verifiedByUsers: arrayUnion(user.$id), 
             });
             console.log("Resource verified successfully!");
         } catch (error) {
@@ -554,10 +564,20 @@ function ResourcePage() {
                                             <div className='verify-container'>
                                                 <button className="action-btn" 
                                                     onClick={() => handleVerifyClick(resource.id)}
-                                                    title={(!user) ? "Log in to verify this resource." : "I verify that this information is correct and helpful."}
+                                                    title={(!user)
+                                                        ? "Log in to verify this resource." 
+                                                        : (resource.verifiedByUsers && resource.verifiedByUsers.includes(user.$id))
+                                                            ? "You have already verified this resource."
+                                                            : "I verify this information is correct and helpful."
+                                                    }
                                                 >✅ Verify ({resource.helpfulCount || 0})</button>
                                                 <span className='rsrc-popup'>
-                                                    {(!user) ? "Log in to verify this resource." : "I verify that this information is correct and helpful."}
+                                                    {(!user) 
+                                                        ? "Log in to verify this resource." 
+                                                        : (resource.verifiedByUsers && resource.verifiedByUsers.includes(user.$id))
+                                                            ? "You have already verified this resource."
+                                                            : "I verify this information is correct and helpful."
+                                                    }
                                                 </span>
                                             </div>
                                             <button className="action-btn">💬 Share</button>
