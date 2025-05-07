@@ -235,12 +235,7 @@ function ResourcePage() {
 
         // filter by verification
         const verifiedFilter = activeFilters['verified'];
-        if (statusFilter !== 'All' && (statusFilter == 'Verified' && resource.helpfulCount < 3)) {
-             return false;
-        }
-
-        //console.log(resource);
-        if (statusFilter !== 'All' && (statusFilter == 'Active' && resource.expired)) {
+        if (statusFilter !== 'All' && (statusFilter == 'Verified' && resource.helpfulCount < 10)) {
              return false;
         }
 
@@ -503,7 +498,7 @@ function ResourcePage() {
                          {[
                          { group: 'resource-type', title: 'Resource Type', options: ['All','Food','Water','Medical','Shelter','Clothing','Financial','Cleanup','Supplies','Transportation'] },
                          { group: 'location', title: 'Location (within 5 miles)', options: []},
-                         { group: 'status', title: 'Status', options: ['All','Verified','Active'] }
+                         { group: 'status', title: 'Status', options: ['All','Verified'] }
                          ].map(({ group, title, options }) => (
                          <div key={group} className={`rsrc-filter-group ${group}`}>
                              <h4>{title}</h4>
