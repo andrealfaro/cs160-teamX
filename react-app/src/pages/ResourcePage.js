@@ -128,6 +128,7 @@ function ResourcePage() {
                 helpfulCount: 0,
                 shareCount: 0,
                 savedBy: [],
+                verified: false
             });
 
             console.log("Resource successfully posted!");
@@ -178,6 +179,12 @@ function ResourcePage() {
              console.warn("Status filtering is not yet implemented in resource data.");
         }
 
+        // filter by status
+        const verifiedFilter = activeFilters['verified'];
+        if (statusFilter !== 'All' && (statusFilter == 'Verified' && resource.helpfulCount < 3)) {
+             return false;
+        }
+
         // all filters passed
         return true;
     });
@@ -202,6 +209,12 @@ function ResourcePage() {
             });
             
             const text = await response.text();
+            if (text.includes('-1')) {
+                alert("We found no matches for your search.");
+                setSearchInput("");
+                setSearchSpinner(false);
+                return;
+            }
             const indices = text.match(/\d+/g).map(Number);
 
             const nogginResultsBools = indices.map(i => resources[i]).filter(Boolean);
