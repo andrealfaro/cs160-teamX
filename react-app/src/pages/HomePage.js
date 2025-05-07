@@ -30,7 +30,7 @@ function HomePage() {
                 .then((json) => {
                     const currAQI = json.list[0].main.aqi;
                     const aqiDesc = ["Good", "Fair", "Moderate", "Poor", "Very Poor"];
-                    const advice = ["No precautions.", "No precautions.", "Limit outdoor activity and close windows.", 
+                    const advice = ["No precautions.", "No precautions.", "No strict precautions. If you see smoke, close windows.", 
                         "Wear N95 masks, do not go outdoors, and close windows.", "Wear N95 masks, do not go outdoors, and close windows."];
                     airFunc({
                         val: currAQI,
@@ -130,9 +130,9 @@ function HomePage() {
                                 <span className="status-indicator status-good"></span>
                                 Power Status
                             </h3>
-                            <p className='status'><strong>Status:</strong> Restored in major areas</p>
-                            <p className='advice'><strong>Outages:</strong> Eastern sector still affected</p>
-                            <p className='updated'><small>Updated: Today, 09:00 AM</small></p>
+                            <p className='status'><strong>Status:</strong> To check outages in your area, visit:
+                            <a href="https://www.sce.com/outage-center/check-outage-status" style={{color:'blue'}}> Southern California Edison's Outage Status</a>.</p>
+                            <p className='updated'><small>Note: It may take up to 30 minutes for reported outages to appear on the map.</small></p>
                         </div>
                     </div>
                 </div>

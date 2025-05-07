@@ -6,17 +6,15 @@ import Footer from '../components/Footer';
 import '../styles/userprofile.css';
 import { useAuth } from '../components/AuthContext.jsx';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import ResourceCard from '../components/ResourceCard';
+
 import UserUpdateCard from '../components/UserUpdateCard';
 function UserProfilePage() { 
     const { user, loading, getUserProfilePicture } = useAuth();
 
     const [activeTab, setActiveTab] = useState('posts');
-    const [filteredPublishedUpdates, setFilteredPublishedUpdates] = useState([]);
-    const [filteredSavedUpdates, setFilteredSavedUpdates] = useState([]);
     const [location, setLocation] = useState('');
     const [profilePicture, setProfilePicture] = useState([]);
-
 
     //getting profile picture from user's account
     useEffect(() => {
@@ -61,22 +59,6 @@ function UserProfilePage() {
             });
         }
     }, []);
-    const checkSavedPosts = async () => {
-        if (!user?.$id) return;
-      
-        const q = query(
-          collection(db, "savedPosts"),
-          where("savedBy", "==", user.$id)
-        );
-      
-        const snapshot = await getDocs(q);
-        const results = snapshot.docs.map(doc => ({
-          docId: doc.id,
-          ...doc.data(),
-        }));
-      
-        console.log("Saved posts for user:", results);
-      };
 
 
     if (!user) {
@@ -113,6 +95,10 @@ function UserProfilePage() {
                                 onClick={() => setActiveTab('saved')}>
                                 Saved Posts
                             </button>
+                            <button className={activeTab === 'resources' ? 'active' : ''}
+                                onClick={() => setActiveTab('resources')}>
+                                Saved Resources
+                            </button>
                         </div>
                         <div className='tab-content'>
                             {activeTab === 'posts' && (
@@ -128,45 +114,15 @@ function UserProfilePage() {
                                     <UserUpdateCard filteredUpdatesId='saved'/>
                                 </div>
                             )}
-                        </div>
-                        {/* <div className='post-card'>
-                            {filteredUpdates.length === 0 ? (
-                            <p>No posts found under your account. Try posting one in the Live Community Updates Page!</p>
-                        ) : (
-                            filteredUpdates.map(update => (
-                                <div className='update-card' key={update.id}> 
-                                    <div className='update-header'>
-                                        <h3>{update.title}</h3>
-                                        <span id='post-time'>{formatRelativeTime(update.createdAt)}</span>
-                                    </div>
-                                    <div className='update-meta'>
-                                        <span id='post-by'>Posted by: {update.postedBy || 'Anonymous'}</span>
-                                    </div>
-                                    <p>{update.description}</p>
-                                    {update.location && <p><strong>Location:</strong> {update.location}</p>}
-
-                                    <div className="tag-list">
-                                        {update.type && Array.isArray(update.type) && update.type.map((tag, index) => (
-                                            <span className="tag" key={index}>{tag}</span>
-                                        ))}
-                                        {update.source && <span className="tag">{update.source}</span>}
-                                    </div>
-                                    <div className="update-actions">
-                                        <div className="action-btns">
-                                            <div className='helpful-share'>
-                                                <button className="action-btn">✅ Verify ({update.helpfulCount || 0})</button>
-                                                <button className="action-btn">💬 Share</button>
-                                            </div>
-                                            <div className='delete-save'>
-                                                <button className="action-btn">📌 Save</button>
-                                                <button className="action-btn" onClick={() => handleDelete(update.id)}>🗑️ Delete</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                            {activeTab === 'resources' && (
+                                <div className='posts-container'>
+                                    <h3>Your Saved Resources</h3>
+                                    {/* <UserUpdateCard filteredUpdatesId='resources'/> */}
+                                    <ResourceCard />
                                 </div>
-                            ))
-                        )}
-                        </div> */}
+                            )}
+                        </div>
+                        
                     </div>
 
                 </div> 
