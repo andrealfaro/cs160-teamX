@@ -1,6 +1,6 @@
 # cs160-teamX
 
-From the react-app README.md
+From the react-app README.md - open the react-app directory to run these commands. 
 
 # Getting Started with Create React App
 
@@ -8,7 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the react-app project directory, you can run:
 
 ### `npm start`
 
