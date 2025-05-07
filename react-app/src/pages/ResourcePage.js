@@ -179,7 +179,7 @@ function ResourcePage() {
              console.warn("Status filtering is not yet implemented in resource data.");
         }
 
-        // filter by status
+        // filter by verification
         const verifiedFilter = activeFilters['verified'];
         if (statusFilter !== 'All' && (statusFilter == 'Verified' && resource.helpfulCount < 3)) {
              return false;
