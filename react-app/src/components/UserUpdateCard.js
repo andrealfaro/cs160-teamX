@@ -106,7 +106,7 @@ function UserUpdateCard({filteredUpdatesId}) {
         const updateFiltered = async () => {
           if (filteredUpdatesId === 'saved') {
             const saved = await fetchSavedPosts(user.$id);
-            console.log("miau saved:", saved);
+    
             const normalized = saved.map(post => ({
                 ...post,
                 createdAt: post.timestamp?.toDate ? post.timestamp.toDate() : new Date(post.timestamp)
