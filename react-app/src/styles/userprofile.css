@@ -73,6 +73,8 @@
     background: #eee;
     cursor: pointer;
     font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s ease;
   }
   
   .tabs-navbar button.active {
