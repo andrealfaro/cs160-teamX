@@ -42,6 +42,7 @@ function ResourcePage() {
 
     const [searchInput, setSearchInput] = useState('');
     const [nogginFilerRes, setNogginFilterRes] = useState(false);
+    const [searchSpinner, setSearchSpinner] = useState(false);
 
     const [activeFilters, setActiveFilters] = useState({
         'resource-type': 'All',
@@ -181,6 +182,7 @@ function ResourcePage() {
     });
 
     const doNogginSearch = async() => {
+        setSearchSpinner(true);
         const allResourceInfo = resources.map((r, i) => `${i}. Title: ${r.title}, Posted By: ${r.postedBy}, Description: ${r.description}, Address: ${r.address}, Location: ${r.location}, Hours: ${r.hours}, Contact: ${r.contact}, Type: ${r.type}, Status: ${r.status}, Time Posted: ${r.timePosted}`).join('\n');
 
         const response = await fetch(
@@ -203,6 +205,7 @@ function ResourcePage() {
 
             const nogginResultsBools = indices.map(i => resources[i]).filter(Boolean);
             setNogginFilterRes(nogginResultsBools);
+            setSearchSpinner(false);
     };
 
     const filterLogic = (resources) => {
@@ -402,8 +405,9 @@ function ResourcePage() {
                     <div className="search-bar">
                         {/* TODO: Implement search functionality */}
                         <input type="text" value={searchInput} placeholder="Search resources..." onChange={(x) => setSearchInput(x.target.value)}/>
-                        <button className="search-btn" onClick={doNogginSearch}>Search</button>
+                        <button className="search-btn" onClick={doNogginSearch} disabled={searchSpinner}>{searchSpinner ? "Searching..." : "Search"}</button>
                         <button className='clear-filters-btn' onClick={clearFiltersFunc}> Clear Filters </button>
+                        {searchSpinner && <div className='spinner'></div>}
                     </div>
                 </div>
 
