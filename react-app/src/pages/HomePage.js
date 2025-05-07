@@ -99,7 +99,7 @@ function HomePage() {
                     <div className='conditions-container'>
                         <div className='condition-card' id='air'>
                             <h3>
-                                <span className="status-indicator status-poor"></span>
+                                <span className="status-indicator status-good"></span>
                                 Air Quality
                             </h3>
                             <p className='status'><strong>Status:</strong> {airState ? airState.desc: 'Loading...'} </p>
@@ -117,7 +117,7 @@ function HomePage() {
                         </div> */}
                         <div className='condition-card' id='fire'>
                             <h3>
-                                <span className="status-indicator status-poor"></span>
+                                <span className="status-indicator status-good"></span>
                                 National Weather Service Fire Alerts
                             </h3>
                             <p className='status'><strong>Status:</strong> {nwsState ? nwsState.headline: 'Loading...'} </p>

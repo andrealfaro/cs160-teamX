@@ -79,7 +79,7 @@ function UserProfilePage() {
                 
                 <div className='user-container'>
                     <div className='user-profile-card'>
-                        <img id='profile-picture' src={profilePicture } alt='User Profile' />
+                        {/* <img id='profile-picture' src={profilePicture } alt='User Profile' /> */}
                         <h1>{user.name}</h1>
                         <p><span id='location'>{location || 'Loading...'}</span></p>
                         <p>{user.email}</p>
