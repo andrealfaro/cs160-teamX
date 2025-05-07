@@ -102,7 +102,7 @@ function ResourceCard() {
                                         {(!user) ? "Log in to verify this resource." : "I verify that this information is correct and helpful."}
                                     </span>
                                 </div>
-                                <button className="action-btn">💬 Share</button>
+                                {/* <button className="action-btn">💬 Share</button> */}
                             </div>
                             {/* <button disabled className="action-btn">📌 Saved!</button> */}
                         </div>
