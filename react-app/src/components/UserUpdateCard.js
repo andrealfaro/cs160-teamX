@@ -106,7 +106,7 @@ function UserUpdateCard({filteredUpdatesId}) {
         const updateFiltered = async () => {
           if (filteredUpdatesId === 'saved') {
             const saved = await fetchSavedPosts(user.$id);
-            console.log("miau saved:", saved);
+    
             const normalized = saved.map(post => ({
                 ...post,
                 createdAt: post.timestamp?.toDate ? post.timestamp.toDate() : new Date(post.timestamp)
@@ -148,8 +148,8 @@ function UserUpdateCard({filteredUpdatesId}) {
                         <div className="update-actions">
                             <div className="action-btns">
                                 <div className='helpful-share'>
-                                    <button className="action-btn">✅ Verify ({update.helpfulCount || 0})</button>
-                                    <button className="action-btn">💬 Share</button>
+                                    {/* /* <button className="action-btn">✅ Verify ({update.helpfulCount || 0})</button> */}
+                                    {/* <button className="action-btn">Remove from Saved</button>  */}
                                 </div>
                                 <div className='delete-save'>
                                     {filteredUpdatesId !== 'saved' && (
