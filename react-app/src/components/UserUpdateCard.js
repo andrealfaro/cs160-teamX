@@ -148,8 +148,8 @@ function UserUpdateCard({filteredUpdatesId}) {
                         <div className="update-actions">
                             <div className="action-btns">
                                 <div className='helpful-share'>
-                                    <button className="action-btn">✅ Verify ({update.helpfulCount || 0})</button>
-                                    <button className="action-btn">💬 Share</button>
+                                    {/* <button className="action-btn">✅ Verify ({update.helpfulCount || 0})</button>
+                                    <button className="action-btn">💬 Share</button> */}
                                 </div>
                                 <div className='delete-save'>
                                     {filteredUpdatesId !== 'saved' && (
