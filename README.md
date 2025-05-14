@@ -1,12 +1,12 @@
 # cs160-teamX
 
-From the react-app README.md - open the react-app directory to run these commands. 
+## First, run these commands in the react-app directory to install the necessary imports.
 
-First, run these commands in the react-app directory to install the necessary imports.
-
-### `npm install firebase` 
+### `npm install firebase`
 
 # Getting Started with Create React App
+
+From the react-app README.md - open the react-app directory to run these commands. 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
