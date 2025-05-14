@@ -2,6 +2,10 @@
 
 From the react-app README.md - open the react-app directory to run these commands. 
 
+First, run these commands in the react-app directory to install the necessary imports.
+
+### `npm install firebase` 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
